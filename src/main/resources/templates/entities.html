@@ -344,7 +344,7 @@
                 const rowTop = tableRowRect.top + window.scrollY;
 
                 let imgElementTop;
-                const imgElementLeft = tableRowRect.left + tableRowRect.width - imgElementRect.width;
+                const imgElementLeft = imgElementRect.left + imgElementRect.width - imgElementRect.width;
 
                 if (rowBottom + imgElementRect.height > window.innerHeight) {
                     imgElementTop = rowTop - imgElementRect.height - 10;
@@ -384,6 +384,16 @@
     tables.forEach(table => {
         table.style.display = 'none';
     });
+
+    if (tabs.length > 0) {
+        tabs[0].classList.add('active'); 
+        const targetId = tabs[0].getAttribute('data-target'); 
+        const selectedTable = document.getElementById(targetId); 
+
+        if (selectedTable) { 
+            selectedTable.style.display = 'flex'
+        }
+    };
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
