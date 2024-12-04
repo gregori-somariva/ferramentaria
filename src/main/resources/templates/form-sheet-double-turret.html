@@ -144,7 +144,6 @@
     }
 
 
-
     #submit-form {
         color: rgb(203, 207, 199);
         height: 45px;
@@ -320,9 +319,9 @@
                             </div>
 
                             <div class="inputWrapper">
-                                <label for="chuckInput">Castanha L2</label>
-                                <input type="text" id="chuckInput" name="secondChuckId" list="chuckDatalist"
-                                th:value="${formSubmission != null ? formSubmission.secondChuckId : ''}" required>
+                                <label for="secondChuckInput">Castanha L2</label>
+                                <input type="text" id="secondChuckInput" name="secondChuckId" list="chuckDatalist"
+                                th:value="${formSubmission != null ? formSubmission.secondChuckId : ''}">
                                 <datalist id="chuckDatalist">
                                     <option th:each="chuck : ${chucks}" th:value="${chuck.chuckId}" th:text="${chuck.chuckName}"></option>
                                 </datalist>
@@ -546,7 +545,7 @@
             if (inputValue && !validOption) {
                 if (inputId.includes('machine')) {
                     errorMessage = `O valor "${inputValue}" não é uma opção válida para a máquina.`;
-                } else if (inputId.includes('chuck')) {
+                } else if (inputId.includes('chuck') || inputId.includes('Chuck')) {
                     errorMessage = `O valor "${inputValue}" não é uma opção válida para a castanha.`;
                 } else if (inputId.includes('operation')) {
                     errorMessage = `O valor "${inputValue}" não é uma opção válida para a operação.`;
@@ -642,6 +641,7 @@
 
             isValid &= checkInputInDatalist('machineInput', 'machineDatalist');
             isValid &= checkInputInDatalist('chuckInput', 'chuckDatalist');
+            isValid &= checkInputInDatalist('secondChuckInput', 'chuckDatalist');
             isValid &= checkInputInDatalist('operationInput', 'operationDatalist');
 
             for (let i = 1; i <= 10; i++) {

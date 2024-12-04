@@ -33,7 +33,7 @@
                 <div id="fieldMachineName" class="field" th:text="${machine.machineName}">CNC 24 - QTS 150 ms galax</div>
                 <div id="operationId" class="label">Operação</div>
                 <div id="fieldOperationId" class="field" th:text="${formSubmission.operationId}"></div>
-                <div id="chuckPressure" class="label">Pressão placa L1</div>
+                <div id="chuckPressure" class="label">Pressão p. L1</div>
                 <div id="fieldChuckPressure" class="field" th:text="${formSubmission.chuckPressure} + 'Kg'"></div>
                 <div id="cycleTime" class="label">Tempo</div>
                 <div id="fieldCycleTime" class="field" th:text="${cycleTime}"></div>
@@ -44,7 +44,7 @@
                 <div id="fieldChuckName" class="field" th:text="${chuck.chuckName + '    ' + chuck.chuckLocation}"></div>
                 <div id="ncName" class="label">Programa</div>
                 <div id="fieldNcName" class="field" th:text="${formSubmission.ncName}">2567.25679L2-5</div>
-                <div id="holdPressure" class="label">Pressão placa L2</div>
+                <div id="holdPressure" class="label">Pressão p. L2</div>
                 <div id="fieldHoldPressure" class="field" th:text="${formSubmission.holdPressure != null ? formSubmission.holdPressure + 'Kg': ''}"></div>
                 <div id="piecesPerHour" class="label">Pç hora</div>
                 <div id="fieldPiecesPerHour" class="field" th:text="${piecesPerHour}"></div>
