@@ -11,7 +11,12 @@
 <body>
     <div class="main">
         <div class="processSheetWrapper" id="processSheetWrapper">
-            <div class="processSheetHeader">FICHA DE PROCESSO USINAGEM</div>
+            <div class="processSheetHeader">
+                <div class="topLogoContainer">
+                    <img src="/icons/logo_mademil.png" alt="">
+                </div>
+                FICHA DE PROCESSO USINAGEM
+            </div>
             <div class="row">
                 <div id="item" class="label">Código produto</div>
                 <div id="fieldItem" class="field" th:text="${formSubmission.item}">2567.25679</div>
@@ -46,7 +51,7 @@
 
             <div class="row">
                 <div id="observation" class="label">Observação</div>
-                <input type="text" id="observationInput" th:value="${formSubmission.holdPressure == null ? 'Não precisa utilizar ponto' : ''}">
+                <input type="text" id="observationInput">
             </div>
 
             <div class="subheader">FIXAÇÃO E FERRAMENTAS</div>

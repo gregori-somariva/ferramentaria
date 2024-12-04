@@ -35,6 +35,20 @@ input:focus{
     font-size: 25px;
     font-weight: bold;
     border: 1px solid black;
+    position: relative;
+}
+
+.topLogoContainer{
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 150px;
+}
+
+.topLogoContainer img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
 }
 
 .row{
