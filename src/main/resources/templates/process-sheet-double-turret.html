@@ -51,7 +51,7 @@
             </div>
             <div class="row">
                 <div id="chuckName" class="label">Castanha L2</div>
-                <div id="fieldSecondChuckName" class="field" th:text="${secondChuck.chuckName + '    ' + secondChuck.chuckLocation}"></div>
+                <div id="fieldSecondChuckName" class="field" th:text="${secondChuck != null ? secondChuck.chuckName + '    ' + secondChuck.chuckLocation : ''}"></div>
             </div>
 
             <div class="row">
@@ -87,7 +87,7 @@
             <div class="subheader">FIXAÇÃO E FERRAMENTAS L2</div>
             <div class="workspace" id="secondWorkspace">
 
-                <div class="imageContainer" id="secondChuckImage" style="transform: translate(0, 0);" th:if="${formSubmission.chuckId != null}">
+                <div class="imageContainer" id="secondChuckImage" style="transform: translate(0, 0);" th:if="${formSubmission.secondChuckId != null}">
                     <img class="image" src="#" th:src="@{/imagem/castanha/{id}(id=${formSubmission.secondChuckId})}" alt="Imagem da Castanha">
                 </div>
 
