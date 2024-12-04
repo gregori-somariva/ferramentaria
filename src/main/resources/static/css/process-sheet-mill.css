@@ -101,6 +101,12 @@ input:focus{
 
 #fieldItemDescription{
     flex: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    justify-content: left;
+    font-size: 11px;
+    padding-left: 5px;
 }
 
 #fieldMachineName,
