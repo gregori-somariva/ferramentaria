@@ -76,6 +76,10 @@ public class ProcessSheetController {
                 redirectAttributes.addAttribute("submissionId", submissionId);
                 return "redirect:/formulario-ficha/mill";
 
+            case "DOUBLE-TURRET":
+            redirectAttributes.addAttribute("submissionId", submissionId);
+            return "redirect:/formulario-ficha/double-turret";
+
             default:
                 return "redirect:/";
         }
