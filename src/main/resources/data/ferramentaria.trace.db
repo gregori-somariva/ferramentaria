@@ -4002,3 +4002,9 @@ WHERE id_formulario != ID_DOCUMENTO [42122-224]
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1575)
+2024-12-04 11:59:59.615600-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHUCK" not found; SQL statement:
+alter table form_submissions add CONSTRAINT second_chuck_id_fk FOREIGN KEY(second_chuck_id) REFERENCES chuck(chuck_id) [42102-224]
+2024-12-04 12:35:22.957324-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FORM_SUBMISSION_TOOLS" not found; SQL statement:
+alter table form_submission_tools add column tool_group VARCHAR(1) [42102-224]

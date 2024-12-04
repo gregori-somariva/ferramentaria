@@ -17,14 +17,16 @@ public class FormSubmissionTool {
     private Integer toolId;
     private Integer toolLength;
     private Integer toolPosition;
+    private Character toolGroup;
 
     public FormSubmissionTool() {}
 
-    public FormSubmissionTool(Integer submissionId, Integer toolId, Integer toolLength, Integer toolPosition) {
+    public FormSubmissionTool(Integer submissionId, Integer toolId, Integer toolLength, Integer toolPosition, Character toolGroup) {
         this.submissionId = submissionId;
         this.toolId = toolId;
         this.toolLength = toolLength;
         this.toolPosition = toolPosition;
+        this.toolGroup = toolGroup;
     }
 
     public Integer getSubmissionId() {
@@ -57,5 +59,13 @@ public class FormSubmissionTool {
 
     public void setToolPosition(Integer toolPosition) {
         this.toolPosition = toolPosition;
+    }
+
+    public Character getToolGroup() {
+        return this.toolGroup;
+    }
+
+    public void setToolGroup(Character toolGroup) {
+        this.toolGroup = toolGroup;
     }
 }

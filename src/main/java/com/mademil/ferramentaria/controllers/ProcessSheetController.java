@@ -138,6 +138,9 @@ public class ProcessSheetController {
                 model.addAttribute("vises", vises); 
                 return "form-sheet-mill";
 
+            case "DOUBLE-TURRET":
+                return "form-sheet-double-turret";
+
             default:
                 return "redirect:/";
         }
@@ -147,6 +150,7 @@ public class ProcessSheetController {
     public String saveFormSubmission(
         @RequestParam("machineId") Integer machineId,
         @RequestParam(value = "chuckId", required = false) Integer chuckId,
+        @RequestParam(value = "secondChuckId", required = false) Integer secondChuckId,
         @RequestParam(value = "templateId", required = false) Integer templateId,
         @RequestParam(value = "viseId", required = false) Integer viseId,
         @RequestParam("item") String item,
@@ -206,6 +210,7 @@ public class ProcessSheetController {
 
             formSubmission.setMachineId(machineId);
             formSubmission.setChuckId(chuckId);
+            formSubmission.setSecondChuckId(secondChuckId);
             formSubmission.setTemplateId(templateId);
             formSubmission.setViseId(viseId);
             formSubmission.setItem(item.toUpperCase());
@@ -235,17 +240,32 @@ public class ProcessSheetController {
                 tool1Length, tool2Length, tool3Length, tool4Length, tool5Length,
                 tool6Length, tool7Length, tool8Length, tool9Length, tool10Length);
 
+            //TOOLS 1 - 5 BELONG TO GROUP A AND TOOLS 6-10 BELONG TO GROUP B. THIS IS ONLY DONE BECAUSE THE DOUBLE-TURRET SHEET HAS 2 GROUPS OF TOOLS
+            //THIS WAS THE QUICKES WAY TO IMPLEMENT THE DESIRED FUNCTIONALITY
+            List<Character> toolGroups = Arrays.asList(
+                Character.toUpperCase('A'),
+                Character.toUpperCase('A'),
+                Character.toUpperCase('A'),
+                Character.toUpperCase('A'),
+                Character.toUpperCase('A'),
+                Character.toUpperCase('B'),
+                Character.toUpperCase('B'),
+                Character.toUpperCase('B'),
+                Character.toUpperCase('B'),
+                Character.toUpperCase('B')
+            );
+
             List<FormSubmissionTool> formSubmissionToolList = new ArrayList<>();
             for (int i = 0; i < toolIds.size(); i++) {
                 Integer toolId = toolIds.get(i);
                 if (toolId != null) {
-                    formSubmissionToolList.add(new FormSubmissionTool(submissionId, toolId, toolLengths.get(i), toolPositions.get(i)));
+                    formSubmissionToolList.add(new FormSubmissionTool(submissionId, toolId, toolLengths.get(i), toolPositions.get(i), toolGroups.get(i)));
                 }
             }
             formSubmissionToolService.saveAllSubmissionToolsFromList(formSubmissionToolList);
 
-            /*after everything from the form-sheet is persisted, redirect to another page that will take the form data from the db to avoid
-            having a html-document without a related form-submission*/
+            //pass submissionId to the document controller because the data is fetched from the dabase to avoid
+            //generating a document with no form submission stored in the db
             redirectAttributes.addAttribute("submissionId", submissionId);
 
             switch (formType.toUpperCase()) {
@@ -254,6 +274,9 @@ public class ProcessSheetController {
     
                 case "MILL":
                     return "redirect:/ficha/mill";
+
+                case "DOUBLE-TURRET":
+                    return "redirect:/ficha/double-turret";
                     
                 default:
                     return "redirect:/";
@@ -280,9 +303,10 @@ public class ProcessSheetController {
 
         if (submissionId != null) {
             User user = userRepository.findByUsername(springUser.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
-           Optional<FormSubmission> optionalFormSubmission = formSubmissionService.getFormSubmissionById(submissionId);
+            Optional<FormSubmission> optionalFormSubmission = formSubmissionService.getFormSubmissionById(submissionId); //fetch the form data from the DB
 
-           if (optionalFormSubmission.isPresent()) {
+
+            if (optionalFormSubmission.isPresent()) {
                 FormSubmission formSubmission = optionalFormSubmission.get();
                 List<FormSubmissionToolDTO> formSubmissionTools = formSubmissionToolService.getAllToolsDTOBySubmissionId(submissionId);
                 Machine machine = machineService.getMachineById(formSubmission.getMachineId()).orElse(null);
@@ -294,7 +318,7 @@ public class ProcessSheetController {
 
                 String cycleTime = DateAndTimeParser.formatCycleTime(formSubmission.getCycleTime());
                 Integer piecesPerHour = 3600 / formSubmission.getCycleTime(); //cycle time is in seconds in the db
-                String dateString = DateAndTimeParser.parseTimesTampIntoCustomFormat(formSubmission.getCreatedAt());// dd/mm/yy - hh:mm:ss
+                String dateString = DateAndTimeParser.parseTimesTampIntoCustomFormat(formSubmission.getCreatedAt()); //dd/mm/yy - hh:mm:ss
                 
                 model.addAttribute("formSubmission", formSubmission);
                 model.addAttribute("formSubmissionTools", formSubmissionTools);
@@ -321,10 +345,30 @@ public class ProcessSheetController {
 
                         return "process-sheet-mill";
 
+                    case "DOUBLE-TURRET":
+                        //need to separate the tools in two groups because the view has two sections for tools, cannot be arbitrary as the
+                        //two different sections represent physical slots in the machines turret
+                        List<FormSubmissionToolDTO> groupATools = formSubmissionTools.stream()
+                        .filter(dto -> dto.getToolGroup() != null && dto.getToolGroup() == 'A')
+                        .toList();
+                
+                        List<FormSubmissionToolDTO> groupBTools = formSubmissionTools.stream()
+                                .filter(dto -> dto.getToolGroup() != null && dto.getToolGroup() == 'B')
+                                .toList();
+
+                        if (formSubmission.getSecondChuckId() != null) {
+                            Chuck secondChuck = chuckService.getChuckById(formSubmission.getSecondChuckId()).orElse(null);
+                            model.addAttribute("secondChuck", secondChuck);
+                        };
+
+                        model.addAttribute("groupATools", groupATools);
+                        model.addAttribute("groupBTools", groupBTools);
+
+                        return "process-sheet-double-turret";
+
                     default:
                         return "redirect:/";
                 }
-
            }else{
                 redirectAttributes.addAttribute("error", "Documento não encontrado: nenhum formulário com ID: " + submissionId);
                 return "redirect:/";

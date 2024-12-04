@@ -9,6 +9,7 @@ public class FormSubmissionToolDTO {
     private String toolName;
     private Integer toolLength;
     private Integer toolPosition;
+    private Character toolGroup;
 
     public FormSubmissionToolDTO(String toolName, FormSubmissionTool formSubmissionTool) {
         this.submissionId = formSubmissionTool.getSubmissionId();
@@ -16,6 +17,7 @@ public class FormSubmissionToolDTO {
         this.toolName = toolName;
         this.toolLength = formSubmissionTool.getToolLength();
         this.toolPosition = formSubmissionTool.getToolPosition();
+        this.toolGroup = formSubmissionTool.getToolGroup();
     }
 
     public Integer getSubmissionId() {
@@ -36,5 +38,9 @@ public class FormSubmissionToolDTO {
 
     public Integer getToolPosition() {
         return toolPosition;
+    }
+
+    public Character getToolGroup() {
+        return toolGroup;
     }
 }

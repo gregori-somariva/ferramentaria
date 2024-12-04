@@ -19,6 +19,7 @@
         private Integer templateId;
         private Integer viseId;
         private Integer chuckId;
+        private Integer secondChuckId;
         private String item;
         private String itemDescription;
         private Integer operationId;
@@ -57,6 +58,14 @@
 
         public void setChuckId(Integer chuckId) {
             this.chuckId = chuckId;
+        }
+
+        public Integer getSecondChuckId() {
+            return secondChuckId;
+        }
+
+        public void setSecondChuckId(Integer secondChuckId) {
+            this.secondChuckId = secondChuckId;
         }
 
         public Integer getTemplateId() {

@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/new-process-sheet.css">
+    <link rel="stylesheet" href="/css/process-sheet-double-turret.css">
     <script src="/scripts/interact.min.js"></script>
     <script src="/scripts/process-sheet.js"></script>
-    <title>Ficha de Processo Usinagem</title>
+    <title>Ficha de processo duas torres</title>
 </head>
 
 <body>
@@ -33,45 +33,73 @@
                 <div id="fieldMachineName" class="field" th:text="${machine.machineName}">CNC 24 - QTS 150 ms galax</div>
                 <div id="operationId" class="label">Operação</div>
                 <div id="fieldOperationId" class="field" th:text="${formSubmission.operationId}"></div>
-                <div id="chuckPressure" class="label">Pressão placa</div>
+                <div id="chuckPressure" class="label">Pressão placa L1</div>
                 <div id="fieldChuckPressure" class="field" th:text="${formSubmission.chuckPressure} + 'Kg'"></div>
                 <div id="cycleTime" class="label">Tempo</div>
                 <div id="fieldCycleTime" class="field" th:text="${cycleTime}"></div>
             </div>
 
             <div class="row">
-                <div id="chuckName" class="label">Castanha</div>
+                <div id="chuckName" class="label">Castanha L1</div>
                 <div id="fieldChuckName" class="field" th:text="${chuck.chuckName + '    ' + chuck.chuckLocation}"></div>
                 <div id="ncName" class="label">Programa</div>
                 <div id="fieldNcName" class="field" th:text="${formSubmission.ncName}">2567.25679L2-5</div>
-                <div id="holdPressure" class="label">Pressão ponto</div>
+                <div id="holdPressure" class="label">Pressão placa L2</div>
                 <div id="fieldHoldPressure" class="field" th:text="${formSubmission.holdPressure != null ? formSubmission.holdPressure + 'Kg': ''}"></div>
                 <div id="piecesPerHour" class="label">Pç hora</div>
                 <div id="fieldPiecesPerHour" class="field" th:text="${piecesPerHour}"></div>
             </div>
+            <div class="row">
+                <div id="chuckName" class="label">Castanha L2</div>
+                <div id="fieldSecondChuckName" class="field" th:text="${secondChuck.chuckName + '    ' + secondChuck.chuckLocation}"></div>
+            </div>
 
             <div class="row">
                 <div id="observation" class="label">Observação</div>
-                <input type="text" id="observationInput" th:value="${formSubmission.holdPressure == null ? 'Não precisa utilizar ponto' : ''}">
+                <input type="text" id="observationInput">
             </div>
 
-            <div class="subheader">FIXAÇÃO E FERRAMENTAS</div>
+            <div class="subheader">FIXAÇÃO E FERRAMENTAS L1</div>
 
-            <div class="workspace">
+            <div class="workspace" id="firstWorkspace">
                 
                 <div class="imageContainer" id="chuckImage" style="transform: translate(0, 0);">
                     <img class="image" src="#" th:src="@{/imagem/castanha/{id}(id=${formSubmission.chuckId})}" alt="Imagem da Castanha">
                 </div>
-
                 
-                <div th:each="formSubmissionTool, iter : ${formSubmissionTools}" class="imageContainer" 
+                <div th:each="formSubmissionTool, iter : ${groupATools}" class="imageContainer" 
                     th:attr="id='image-tool-' + ${iter.index}" style="transform: translate(0, 0);">
                     <img class="image" src="#" th:src="@{/imagem/ferramenta/{id}(id=${formSubmissionTool.toolId})}" alt="Imagem da Ferramenta">
                 </div>
 
                 <div class="toolSectionWrapper">
                     <div class="subheader">FERRAMENTAS</div>
-                    <div th:each="formSubmissionTool, iter : ${formSubmissionTools}" class="toolRow">
+
+                    <div th:each="formSubmissionTool, iter : ${groupATools}" class="toolRow">
+                        <div id="tool" class="label">Ferramenta</div>
+                        <div id="fieldTool" class="field" th:text="${formSubmissionTool != null ? formSubmissionTool.toolName + (formSubmissionTool.toolLength != null ? ' (' + formSubmissionTool.toolLength + ' mm)' : '') : ''}"></div>
+                        <div id="turretPosition" class="label">Posição Torre</div>
+                        <div id="fieldTurretPosition" class="field" th:text="${formSubmissionTool != null ? formSubmissionTool.toolPosition : ''}"></div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="subheader">FIXAÇÃO E FERRAMENTAS L2</div>
+            <div class="workspace" id="secondWorkspace">
+
+                <div class="imageContainer" id="secondChuckImage" style="transform: translate(0, 0);" th:if="${formSubmission.chuckId != null}">
+                    <img class="image" src="#" th:src="@{/imagem/castanha/{id}(id=${formSubmission.secondChuckId})}" alt="Imagem da Castanha">
+                </div>
+
+                <div th:each="formSubmissionTool, iter : ${groupBTools}" class="imageContainer" 
+                    th:attr="id='image-tool-' + ${iter.index + 5}" style="transform: translate(0, 0);">
+                    <img class="image" src="#" th:src="@{/imagem/ferramenta/{id}(id=${formSubmissionTool.toolId})}" alt="Imagem da Ferramenta">
+                </div>
+
+                <div class="toolSectionWrapper">
+                    <div class="subheader">FERRAMENTAS</div>
+
+                    <div th:each="formSubmissionTool, iter : ${groupBTools}" class="toolRow">
                         <div id="tool" class="label">Ferramenta</div>
                         <div id="fieldTool" class="field" th:text="${formSubmissionTool != null ? formSubmissionTool.toolName + (formSubmissionTool.toolLength != null ? ' (' + formSubmissionTool.toolLength + ' mm)' : '') : ''}"></div>
                         <div id="turretPosition" class="label">Posição Torre</div>
@@ -122,6 +150,7 @@
                 <div class="timeStamp">
                     <div th:text="${dateString != null ?  dateString : 'Erro ao buscar pela data atual'}">asdsadsd</div>
                 </div>
+
             </div>
         </div>
 
