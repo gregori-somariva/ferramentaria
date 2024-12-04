@@ -1,0 +1,20 @@
+
+<div id="side-bar-fragment" th:fragment="side-bar">
+    <div class="hover-area"></div>
+    <div class="side-bar">
+        <header>Ferramentaria</header>
+        <ul>
+            <li><a href="/">Início</a></li>
+            <li><a href="/ficha/ativas">Fichas de Processo Ativas</a></li>
+            <li><a href="/entidades">Tabela de Cadastros</a></li>
+        </ul>
+        <div class="user">
+            <div class="userFullName" th:text="${user != null ? user.fullName : 'Convidado'}">Convidado</div>
+            <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            </form>
+            <a id="logoutLink" href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Sair</a>
+        </div>
+    </div>
+</div>
+    

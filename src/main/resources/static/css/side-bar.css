@@ -1,0 +1,96 @@
+#side-bar-fragment * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#side-bar-fragment .side-bar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    height: 100%;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(231, 231, 231);
+    color: rgb(24, 24, 24);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 0px 0px 25px rgb(212, 212, 212);
+    border-right: 1px solid rgb(207, 207, 207);
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+
+#side-bar-fragment .hover-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 100%;
+    z-index: 10;
+}
+
+#side-bar-fragment .hover-area:hover + .side-bar,
+#side-bar-fragment .side-bar:hover {
+    left: 0;
+}
+
+#side-bar-fragment header {
+    text-align: center;
+    font-size: 1.5rem;
+    padding-bottom: 15px;
+    padding-top: 20px;
+    background: rgb(248, 246, 246);
+    border-bottom: 1px solid rgb(194, 194, 194);
+    width: 100%;
+}
+
+#side-bar-fragment ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: 15px;
+    background: rgb(248, 246, 246);
+    border-bottom: 1px solid rgb(177, 175, 175);
+}
+
+#side-bar-fragment a {
+    text-align: left;
+    color: rgb(68, 68, 68);
+    text-decoration: none;
+    font-size: 1rem;
+    display: block;
+    line-height: 65px;
+    padding-left: 10px;
+}
+
+#side-bar-fragment a:hover {
+    background-color: rgb(197, 197, 197);
+    color: white;
+}
+
+#side-bar-fragment .user {
+    margin-top: auto;
+    padding-bottom: 50px;
+    text-align: center;
+}
+
+#side-bar-fragment .userFullName {
+    color: grey;
+}
+
+#side-bar-fragment #logoutLink {
+    text-align: center;
+    padding: 0;
+    text-decoration: underline;
+    color: rgb(132, 165, 180);
+    line-height: 25px;
+}
+
+#side-bar-fragment #logoutLink:hover {
+    color: rgb(168, 191, 202);
+    background-color: transparent;
+}
