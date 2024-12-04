@@ -37,9 +37,9 @@
                 <div id="chuckName" class="label">Castanha</div>
                 <div id="fieldChuckName" class="field" th:text="${chuck != null ? chuck.chuckName + ' - ' + chuck.chuckLocation : ''}"></div>
                 <div id="templateName" class="label">Gabarito</div>
-                <div id="fieldTemplateName" class="field" th:text="${template != null ? template.templateName + ' - ' + template.templateLocation: ''}"></div>
+                <div id="fieldTemplateName" class="field" th:text="${template != null ? template.templateName : ''}"></div>
                 <div id="viseName" class="label">Morsa</div>
-                <div id="fieldViseName" class="field" th:text="${vise != null ? vise.viseName + ' - ' + vise.viseLocation : ''}"></div>
+                <div id="fieldViseName" class="field" th:text="${vise != null ? vise.viseName : ''}"></div>
                 <div id="piecesPerHour" class="label">Pç hora</div>
                 <div id="fieldPiecesPerHour" class="field" th:text="${piecesPerHour}"></div>
             </div>
