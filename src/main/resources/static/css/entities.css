@@ -1,0 +1,143 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.815);
+    font-family: 'Times New Roman', Times, serif;
+    height: 100vh;
+    overflow: hidden;
+    gap: 25px;
+    color: rgb(65, 63, 63);
+}
+
+.entityWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    height: 70%;
+    min-width: 700px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.tableWrapper {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    background-color: rgba(246, 247, 245, 0.822);
+    border: 1px solid rgb(211, 212, 214);
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px rgba(165, 163, 163, 0.527);
+    position: relative;
+    padding: 15px;
+    height: 100%;
+    overflow: auto;
+}
+
+.addEntityLink {
+    text-decoration: none;
+    color: rgb(144, 214, 144);
+    font-weight: bold;
+}
+
+table {
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
+
+thead th {
+    padding: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgb(34, 38, 58);
+}
+
+tbody td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+tbody tr:hover {
+    background-color: rgb(198, 201, 204);
+}
+
+.actionButtonWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+button {
+    border: 0;
+    border-radius: 2px;
+    padding: 4px;
+    color: white;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.updateEntityButton {
+    background-color: rgb(104, 149, 179);
+}
+
+.updateEntityButton:hover {
+    background-color: rgba(64, 99, 122, 0.74);
+}
+
+.deleteEntityButton {
+    background-color: rgb(185, 105, 105);
+}
+
+.deleteEntityButton:hover {
+    background-color: rgba(185, 105, 105, 0.692);
+}
+
+@media (max-width: 750px) {
+    .entityWrapper {
+        flex-direction: column;
+    }
+}
+
+.entityImage {
+    position: absolute;
+    width: 200px;
+    max-height: 450px;
+    margin-top: 0px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgb(165, 165, 165);
+    z-index: 1000;
+}
+
+.tableSelector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.tableTab {
+    padding: 10px 20px;
+    background-color: #c5c5c5;
+    color: rgb(82, 82, 82);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tableTab:hover {
+    background-color: #e0e0e0;
+}
+
+.tableTab.active {
+    background-color: #adadad;
+    color: #fff;
+}

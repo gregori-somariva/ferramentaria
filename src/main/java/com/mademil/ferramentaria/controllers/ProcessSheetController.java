@@ -1,9 +1,10 @@
 package com.mademil.ferramentaria.controllers;
 
 import com.mademil.ferramentaria.service.*;
-
-import com.mademil.ferramentaria.dto.FormSubmissionToolDTO;
 import com.mademil.ferramentaria.entities.*;
+import com.mademil.ferramentaria.enums.*;
+import com.mademil.ferramentaria.dto.CompleteFormDataDTO;
+import com.mademil.ferramentaria.dto.FormSubmissionToolDTO;
 import com.mademil.ferramentaria.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,7 +63,7 @@ public class ProcessSheetController {
 
 
     @GetMapping("/formulario-ficha")
-    public String redirectToPropperForm(
+    public String redirectToPropperFormToUpdateDocument(
         @RequestParam("formType") String formType,
         @RequestParam(value = "submissionId", required = false) Integer submissionId,
         RedirectAttributes redirectAttributes) {
@@ -81,6 +83,7 @@ public class ProcessSheetController {
             return "redirect:/formulario-ficha/double-turret";
 
             default:
+                redirectAttributes.addAttribute("error", "ERRO CRÍTICO: Sem formulário para tipo " + formType);
                 return "redirect:/";
         }
     }
@@ -146,115 +149,68 @@ public class ProcessSheetController {
         }
     }
     
-    @PostMapping("/salvar-formulario")
+    @PostMapping("/salvar-formulario/{formType}")
     public String saveFormSubmission(
-        @RequestParam("machineId") Integer machineId,
-        @RequestParam(value = "chuckId", required = false) Integer chuckId,
-        @RequestParam(value = "secondChuckId", required = false) Integer secondChuckId,
-        @RequestParam(value = "templateId", required = false) Integer templateId,
-        @RequestParam(value = "viseId", required = false) Integer viseId,
-        @RequestParam("item") String item,
-        @RequestParam("itemDescription") String itemDescription,
-        @RequestParam("operationId") Integer operationId,
-        @RequestParam("ncName") String ncName,
-        @RequestParam("cycleTime") String cycleTime,
-        @RequestParam("userId") Integer userId,
-        @RequestParam(value = "holdPressure", required = false) Integer holdPressure,
-        @RequestParam(value = "chuckPressure", required = false) Integer chuckPressure,
-        @RequestParam("formType") String formType,
+        @PathVariable("formType") String formType,
+        @ModelAttribute CompleteFormDataDTO completeFormDataDTO,
+        RedirectAttributes redirectAttributes) {
 
-        @RequestParam("tool1Id") Integer tool1Id,
-        @RequestParam("tool1Position") Integer tool1Position,
-        @RequestParam(value = "tool1Length", required = false) Integer tool1Length,
-        
-        @RequestParam(value = "tool2Id", required = false) Integer tool2Id,
-        @RequestParam(value = "tool2Position", required = false) Integer tool2Position,
-        @RequestParam(value = "tool2Length", required = false) Integer tool2Length,
-    
-        @RequestParam(value = "tool3Id", required = false) Integer tool3Id,
-        @RequestParam(value = "tool3Position", required = false) Integer tool3Position,
-        @RequestParam(value = "tool3Length", required = false) Integer tool3Length,
-    
-        @RequestParam(value = "tool4Id", required = false) Integer tool4Id,
-        @RequestParam(value = "tool4Position", required = false) Integer tool4Position,
-        @RequestParam(value = "tool4Length", required = false) Integer tool4Length,
-    
-        @RequestParam(value = "tool5Id", required = false) Integer tool5Id,
-        @RequestParam(value = "tool5Position", required = false) Integer tool5Position,
-        @RequestParam(value = "tool5Length", required = false) Integer tool5Length,
-    
-        @RequestParam(value = "tool6Id", required = false) Integer tool6Id,
-        @RequestParam(value = "tool6Position", required = false) Integer tool6Position,
-        @RequestParam(value = "tool6Length", required = false) Integer tool6Length,
-    
-        @RequestParam(value = "tool7Id", required = false) Integer tool7Id,
-        @RequestParam(value = "tool7Position", required = false) Integer tool7Position,
-        @RequestParam(value = "tool7Length", required = false) Integer tool7Length,
-    
-        @RequestParam(value = "tool8Id", required = false) Integer tool8Id,
-        @RequestParam(value = "tool8Position", required = false) Integer tool8Position,
-        @RequestParam(value = "tool8Length", required = false) Integer tool8Length,
-    
-        @RequestParam(value = "tool9Id", required = false) Integer tool9Id,
-        @RequestParam(value = "tool9Position", required = false) Integer tool9Position,
-        @RequestParam(value = "tool9Length", required = false) Integer tool9Length,
-    
-        @RequestParam(value = "tool10Id", required = false) Integer tool10Id,
-        @RequestParam(value = "tool10Position", required = false) Integer tool10Position,
-        @RequestParam(value = "tool10Length", required = false) Integer tool10Length,
-    
-        RedirectAttributes redirectAttributes
-    ) {
         try {
+
+            if (!FormType.isValidFormType(formType)) {
+                redirectAttributes.addAttribute("error", "ERRO CRÍTICO: Tipo de formulário inválido");
+                return "redirect:/";
+            }
+
+            // Create a new FormSubmission object
             FormSubmission formSubmission = new FormSubmission();
 
-            formSubmission.setMachineId(machineId);
-            formSubmission.setChuckId(chuckId);
-            formSubmission.setSecondChuckId(secondChuckId);
-            formSubmission.setTemplateId(templateId);
-            formSubmission.setViseId(viseId);
-            formSubmission.setItem(item.toUpperCase());
-            formSubmission.setItemDescription(itemDescription.toUpperCase());
-            formSubmission.setOperationId(operationId); 
-            formSubmission.setNcName(ncName.toUpperCase());
-            formSubmission.setCycleTime(DateAndTimeParser.parseCycleTimeToTotalSeconds(cycleTime));
-            formSubmission.setUserId(userId);
-            formSubmission.setChuckPressure(chuckPressure);
-            formSubmission.setHoldPressure(holdPressure);
+            // Map data from CompleteFormDataDTO to FormSubmission
+            formSubmission.setMachineId(completeFormDataDTO.getMachineId());
+            formSubmission.setChuckId(completeFormDataDTO.getChuckId());
+            formSubmission.setSecondChuckId(completeFormDataDTO.getSecondChuckId());
+            formSubmission.setTemplateId(completeFormDataDTO.getTemplateId());
+            formSubmission.setViseId(completeFormDataDTO.getViseId());
+            formSubmission.setItem(completeFormDataDTO.getItem().toUpperCase());
+            formSubmission.setItemDescription(completeFormDataDTO.getItemDescription().toUpperCase());
+            formSubmission.setOperationId(completeFormDataDTO.getOperationId());
+            formSubmission.setNcName(completeFormDataDTO.getNcName().toUpperCase());
+            formSubmission.setCycleTime(DateAndTimeParser.parseCycleTimeToTotalSeconds(completeFormDataDTO.getCycleTime()));
+            formSubmission.setUserId(completeFormDataDTO.getUserId());
+            formSubmission.setChuckPressure(completeFormDataDTO.getChuckPressure());
+            formSubmission.setHoldPressure(completeFormDataDTO.getHoldPressure());
             formSubmission.setCreatedAt(LocalDateTime.now());
-            formSubmission.setIsSaved(false);;
-            formSubmission.setFormType(formType);
+            formSubmission.setIsSaved(false);
+            formSubmission.setFormType(formType.toUpperCase());
             formSubmissionService.saveFormSubmission(formSubmission);
 
+            // Get the submissionId after saving the formSubmission
             Integer submissionId = formSubmission.getSubmissionId(); 
 
+            // Prepare lists of tool data from CompleteFormDataDTO
             List<Integer> toolIds = Arrays.asList(
-                tool1Id, tool2Id, tool3Id, tool4Id, tool5Id,
-                tool6Id, tool7Id, tool8Id, tool9Id, tool10Id);
+                completeFormDataDTO.getTool1Id(), completeFormDataDTO.getTool2Id(), completeFormDataDTO.getTool3Id(),
+                completeFormDataDTO.getTool4Id(), completeFormDataDTO.getTool5Id(), completeFormDataDTO.getTool6Id(),
+                completeFormDataDTO.getTool7Id(), completeFormDataDTO.getTool8Id(), completeFormDataDTO.getTool9Id(),
+                completeFormDataDTO.getTool10Id());
 
             List<Integer> toolPositions = Arrays.asList(
-                tool1Position, tool2Position, tool3Position, tool4Position, tool5Position,
-                tool6Position,tool7Position, tool8Position, tool9Position, tool10Position);
+                completeFormDataDTO.getTool1Position(), completeFormDataDTO.getTool2Position(), completeFormDataDTO.getTool3Position(),
+                completeFormDataDTO.getTool4Position(), completeFormDataDTO.getTool5Position(), completeFormDataDTO.getTool6Position(),
+                completeFormDataDTO.getTool7Position(), completeFormDataDTO.getTool8Position(), completeFormDataDTO.getTool9Position(),
+                completeFormDataDTO.getTool10Position());
 
             List<Integer> toolLengths = Arrays.asList(
-                tool1Length, tool2Length, tool3Length, tool4Length, tool5Length,
-                tool6Length, tool7Length, tool8Length, tool9Length, tool10Length);
+                completeFormDataDTO.getTool1Length(), completeFormDataDTO.getTool2Length(), completeFormDataDTO.getTool3Length(),
+                completeFormDataDTO.getTool4Length(), completeFormDataDTO.getTool5Length(), completeFormDataDTO.getTool6Length(),
+                completeFormDataDTO.getTool7Length(), completeFormDataDTO.getTool8Length(), completeFormDataDTO.getTool9Length(),
+                completeFormDataDTO.getTool10Length());
 
-            //TOOLS 1 - 5 BELONG TO GROUP A AND TOOLS 6-10 BELONG TO GROUP B. THIS IS ONLY DONE BECAUSE THE DOUBLE-TURRET SHEET HAS 2 GROUPS OF TOOLS
-            //THIS WAS THE QUICKES WAY TO IMPLEMENT THE DESIRED FUNCTIONALITY
+            // Grouping tools in 2 groups: A (tools 1-5), B (tools 6-10)
             List<Character> toolGroups = Arrays.asList(
-                Character.toUpperCase('A'),
-                Character.toUpperCase('A'),
-                Character.toUpperCase('A'),
-                Character.toUpperCase('A'),
-                Character.toUpperCase('A'),
-                Character.toUpperCase('B'),
-                Character.toUpperCase('B'),
-                Character.toUpperCase('B'),
-                Character.toUpperCase('B'),
-                Character.toUpperCase('B')
-            );
+                'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'B');
 
+            // Create list of FormSubmissionTool objects
             List<FormSubmissionTool> formSubmissionToolList = new ArrayList<>();
             for (int i = 0; i < toolIds.size(); i++) {
                 Integer toolId = toolIds.get(i);
@@ -264,47 +220,45 @@ public class ProcessSheetController {
             }
             formSubmissionToolService.saveAllSubmissionToolsFromList(formSubmissionToolList);
 
-            //pass submissionId to the document controller because the data is fetched from the dabase to avoid
-            //generating a document with no form submission stored in the db
+            // Pass submissionId to the document controller because the data is fetched from the database
             redirectAttributes.addAttribute("submissionId", submissionId);
-
             switch (formType.toUpperCase()) {
                 case "STANDARD":
                     return "redirect:/ficha/standard";
-    
+
                 case "MILL":
                     return "redirect:/ficha/mill";
 
                 case "DOUBLE-TURRET":
                     return "redirect:/ficha/double-turret";
-                    
+
                 default:
+                    redirectAttributes.addAttribute("ERRO CRÍTICO: Não existe documento com este tipo: ", formType);
                     return "redirect:/";
             }
-        }catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             System.err.println(e.getMessage());
-            redirectAttributes.addAttribute("error", "Erro de integridade de dados: entre em contato com o administrador");
+            redirectAttributes.addAttribute("error", "Erro de integridade de dados");
             return "redirect:/";
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
-            redirectAttributes.addAttribute("error", "Erro inesperado: entre em contato com o administrador");
+            redirectAttributes.addAttribute("error", "Erro inesperado");
             return "redirect:/";
         }
-
     }
+
 
     @GetMapping("/ficha/{formType}")
     public String serveProcessSheet(
         @RequestParam("submissionId") Integer submissionId,
         @PathVariable("formType") String formType,
-        Model model,
+        @AuthenticationPrincipal UserDetails springUser,
         RedirectAttributes redirectAttributes,
-        @AuthenticationPrincipal UserDetails springUser) {
+        Model model) {
 
         if (submissionId != null) {
             User user = userRepository.findByUsername(springUser.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
             Optional<FormSubmission> optionalFormSubmission = formSubmissionService.getFormSubmissionById(submissionId); //fetch the form data from the DB
-
 
             if (optionalFormSubmission.isPresent()) {
                 FormSubmission formSubmission = optionalFormSubmission.get();
@@ -408,7 +362,7 @@ public class ProcessSheetController {
             formSubmission.setIsSaved(true);
             formSubmissionService.saveFormSubmission(formSubmission);
         }else{
-            redirectAttributes.addAttribute("error", "Erro ao salvar ficha de processo: parametros críticos não encontrados, entre em contato com o administrador");
+            redirectAttributes.addAttribute("error", "ERRO CRÍTICO: Parâmetros necessários não encontrados");
         }
         return "redirect:/";
     }

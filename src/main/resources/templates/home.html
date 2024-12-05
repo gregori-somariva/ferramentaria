@@ -70,6 +70,12 @@
         margin-top: 15px;
     }
 
+    .alert{
+        color: rgb(204, 80, 80);
+        position: absolute;
+        top: 15px;
+    }
+
     @media (max-width: 1000px){
 
         body{
@@ -88,9 +94,11 @@
 <body>
 
     <div th:replace="~{fragments/side-bar.html :: side-bar}"></div>
-
-    
     <div class="main">
+        <div th:if="${error}" class="alert" role="alert">
+            <span href="/entidades" th:text="${error}">Erros aparecerão aqui</span>
+        </div>
+
         <div class="wrapper">
             <a href="/formulario-ficha/standard" class="formImage">
                 <div class="imageContainer">

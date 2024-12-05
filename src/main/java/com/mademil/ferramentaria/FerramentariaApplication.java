@@ -9,4 +9,3 @@ public class FerramentariaApplication {
 		SpringApplication.run(FerramentariaApplication.class, args	);
 	}
 }
-	

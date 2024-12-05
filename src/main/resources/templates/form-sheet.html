@@ -225,8 +225,7 @@
                 <span href="/entidades" th:text="${error}">Erros aparecerão aqui</span>
             </div>
 
-            <form action="/salvar-formulario" method="post">
-                <input type="hidden" name="formType" value="STANDARD">
+            <form action="/salvar-formulario/standard" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
                 <input type="hidden" name="userId" th:value="${user.id}">

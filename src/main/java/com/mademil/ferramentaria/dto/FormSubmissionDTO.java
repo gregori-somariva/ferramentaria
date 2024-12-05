@@ -4,14 +4,18 @@ import com.mademil.ferramentaria.entities.FormSubmission;
 
 import java.time.LocalDateTime;
 
+// This DTO serves to populate the table on
+// active-sheets.html and legacy-sheets.html
+// All the data in this DTO is necessary
+// to provide the full functionality of the view
 public class FormSubmissionDTO {
     
     private Integer submissionId;
-    private Integer machineId;
+    private Integer machineId; 
     private String machineName;
-    private String item;
+    private String item; 
     private String itemDescription;
-    private Integer operationId;
+    private Integer operationId; 
     private String cycleTime;
     private Integer userId;
     private String userFullName;

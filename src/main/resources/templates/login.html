@@ -105,7 +105,7 @@
         <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
         
         <div class="inputSection">
-            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            <div th:if="${param.error}" class="alert" role="alert">
                 Usuário ou senha inválidos.
             </div>
 

@@ -126,7 +126,7 @@
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             
             <div class="inputSection">
-                <div th:if="${error}" class="alert alert-danger" role="alert">
+                <div th:if="${error}" class="alert" role="alert">
                     <a href="/entidades" th:text="${error}">Erros aparecerão aqui</a>
                 </div>
 

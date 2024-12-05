@@ -148,7 +148,7 @@
 <body>
     <div th:replace="~{fragments/side-bar.html :: side-bar(user=${user})}"></div>
 
-    <div th:if="${error}" class="alert-danger" role="alert">
+    <div th:if="${error}" class="alert" role="alert">
         <span style="color: rgb(172, 69, 69);" th:text="${error}">Erros aparecerão aqui</span>
     </div>
 
