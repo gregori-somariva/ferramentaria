@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/imagem")
@@ -25,7 +26,7 @@ public class ImageController {
 
     @Autowired
     private ChuckService chuckService;
-    
+
     @Autowired
     private ToolService toolService;
 
@@ -35,75 +36,40 @@ public class ImageController {
     @Autowired
     private ViseService viseService;
 
-    @GetMapping("/castanha/{id}")
-    public ResponseEntity<byte[]> getChuckImage(@PathVariable("id") Integer id) {
-
-        Optional<Chuck> chuckOptional = chuckService.getChuckById(id);
-
-        if (chuckOptional.isPresent()) {
-            Chuck chuck = chuckOptional.get();
-            byte[] imageBytes = chuck.getChuckImage();
+    private <T> ResponseEntity<byte[]> getImage(
+        Function<Integer, Optional<T>> findEntityById,
+        Function<T, byte[]> getImageFunction, Integer id) {
             
+        Optional<T> entityOptional = findEntityById.apply(id);
+        if (entityOptional.isPresent()) {
+            T entity = entityOptional.get();
+            byte[] imageBytes = getImageFunction.apply(entity);
             if (imageBytes != null) {
                 return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_PNG) 
+                        .contentType(MediaType.IMAGE_PNG)
                         .body(imageBytes);
             }
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/castanha/{id}")
+    public ResponseEntity<byte[]> getChuckImage(@PathVariable("id") Integer id) {
+        return getImage(chuckService::getChuckById, Chuck::getChuckImage, id);
     }
 
     @GetMapping("/ferramenta/{id}")
     public ResponseEntity<byte[]> getToolImage(@PathVariable("id") Integer id) {
-        
-        Optional<Tool> toolOptional = toolService.getToolById(id);
-
-        if (toolOptional.isPresent()) {
-            Tool tool = toolOptional.get();
-            byte[] imageBytes = tool.getToolImage();
-            
-            if (imageBytes != null) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_PNG) 
-                        .body(imageBytes);
-            }
-        }
-        return ResponseEntity.notFound().build();
+        return getImage(toolService::getToolById, Tool::getToolImage, id);
     }
 
     @GetMapping("/gabarito/{id}")
     public ResponseEntity<byte[]> getTemplateImage(@PathVariable("id") Integer id) {
-
-        Optional<Template> templateOptional = templateService.getTemplateById(id);
-
-        if (templateOptional.isPresent()) {
-            Template template = templateOptional.get();
-            byte[] imageBytes = template.getTemplateImage();
-            
-            if (imageBytes != null) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_PNG) 
-                        .body(imageBytes);
-            }
-        }
-        return ResponseEntity.notFound().build();
+        return getImage(templateService::getTemplateById, Template::getTemplateImage, id);
     }
 
     @GetMapping("/morsa/{id}")
     public ResponseEntity<byte[]> getViseImage(@PathVariable("id") Integer id) {
-
-        Optional<Vise> viseOptional = viseService.getViseById(id);
-
-        if (viseOptional.isPresent()) {
-            Vise vise = viseOptional.get();
-            byte[] imageBytes = vise.getViseImage();
-            
-            if (imageBytes != null) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_PNG) 
-                        .body(imageBytes);
-            }
-        }
-        return ResponseEntity.notFound().build();
+        return getImage(viseService::getViseById, Vise::getViseImage, id);
     }
 }
