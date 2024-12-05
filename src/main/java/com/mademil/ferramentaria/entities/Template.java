@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "templates")
@@ -13,9 +15,16 @@ public class Template {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer templateId;
+
+    @NotBlank(message ="Nome não pode estar vazio")
+    @Size(max = 50, message = "Nome não pode ultrapassar 50 caracteres")
     private String templateName;
+
     @Lob
     private byte[] templateImage;
+
+    @NotBlank(message = "Localização não pode estar vazia")
+    @Size(max = 100, message = "Localização não pode ultrapassar 100 caracteres")
     private String templateLocation;
     private Boolean isDeleted;
 

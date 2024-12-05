@@ -17,11 +17,17 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,19 +50,30 @@ public class EntityController {
     @Autowired
     UserRepository userRepository;
 
+    // Disallow images to prevent @ModelAttribute from auto binding.
+    // Needs to exist because multipart must be converted to byte[] before saving.
+    @InitBinder
+    public void initBinder(WebDataBinder binder) { 
+        binder.setDisallowedFields("chuckImage", "toolImage", "templateImage", "viseImage"); 
+    }
+
     @GetMapping("/entidades")
-    public String entitiesTable(
+    public String serveEntitiesPage(
         @RequestParam(value = "error", required = false) String error,
         @AuthenticationPrincipal UserDetails springUser,
         Model model){
+
+        User user = userRepository.findByUsername(springUser.getUsername())
+        .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
 
         List<Chuck> chucks = chuckService.getAllActiveChucks();
         List<Tool> tools = toolService.getAllActiveTools();
         List<Template> templates = templateService.getAllActiveTemplates();
         List<Vise> vises = viseService.getAllActiveVises();
-
-        User user = userRepository.findByUsername(springUser.getUsername())
-        .orElseThrow(() -> new RuntimeException("User not found"));
 
         model.addAttribute("user", user);
         model.addAttribute("chucks", chucks);
@@ -64,9 +81,6 @@ public class EntityController {
         model.addAttribute("templates", templates);
         model.addAttribute("vises", vises);
 
-        if (error != null) {
-            model.addAttribute("error", error);
-        }
         return "entities";
     }
 
@@ -75,6 +89,10 @@ public class EntityController {
         @RequestParam(value = "chuckId", required = false) Integer chuckId,
         @RequestParam(value = "error", required = false) String errorMessage,
         Model model){
+
+        if (errorMessage != null) {
+            model.addAttribute("error", errorMessage);
+        }
 
         if (chuckId != null) {
             Optional<Chuck> optionalChuck = chuckService.getChuckById(chuckId);
@@ -86,47 +104,58 @@ public class EntityController {
                 model.addAttribute("error", "Castanha não encontrada: " + chuckId);
             }
         }
-        if (errorMessage != null) {
-            model.addAttribute("error", errorMessage);
-        }
         return "form-chuck";
     }
 
     @PostMapping("/adicionar-castanha")
     public String addChuckToDatabase(
         @RequestParam(value = "chuckId", required = false) Integer chuckId,
-        @RequestParam("chuckName") String chuckName,
-        @RequestParam("chuckLocation") String chuckLocation,
-        @RequestParam("chuckImage") MultipartFile chuckImage,
-        RedirectAttributes redirectAttributes){
+        @RequestParam("chuckImage") MultipartFile chuckImage, // Handle image manually because it was disallowed on .initBinder()
+        @Valid @ModelAttribute Chuck chuck,
+        BindingResult bindingResult,
+        RedirectAttributes redirectAttributes) {
 
-        try {
-            Chuck chuck = new Chuck();
-            if (chuckId != null) chuck.setChuckId(chuckId);
-            chuck.setChuckName(chuckName.toUpperCase());
-            chuck.setChuckLocation(chuckLocation.toUpperCase());
-            chuck.setChuckImage(chuckImage.getBytes());
-            chuck.setIsDeleted(false);
-            chuckService.saveChuck(chuck);
-        }catch (DataIntegrityViolationException e){
-            System.err.println("Data Integrity error: " + e.getMessage());
-            redirectAttributes.addAttribute("error", "Já existe uma castanha com este nome");
-            return "redirect:/formulario-castanha";
-        }catch (IOException e){
-            System.err.println("IO Error: " + e.getMessage());
-            redirectAttributes.addAttribute("error", "Não foi possível ler a imagem");
+        // If there are validation errors, return to the form with the error message
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("error", errorMessage);
             return "redirect:/formulario-castanha";
         }
-        return "redirect:/entidades";
-    }
+    
+        try {
+            if (chuckId != null) {
+                chuck.setChuckId(chuckId);  // If chuckId is provided, set it on the object to update it
+            }
+            chuck.setChuckName(chuck.getChuckName().toUpperCase());
+            chuck.setChuckLocation(chuck.getChuckLocation().toUpperCase());
+            chuck.setChuckImage(chuckImage.getBytes());
+            chuck.setIsDeleted(false);  // It is default false in DB but does not hurt to make sure
+            chuckService.saveChuck(chuck);
+    
+            return "redirect:/entidades";  // Redirect to the entities page after success
+        } catch (DataIntegrityViolationException e) {
+            System.err.println("Data Integrity error: " + e.getMessage());
 
+            // This error message is generic because error handling is done in the entity class via constraint annotations
+            redirectAttributes.addFlashAttribute("error", "Integridade de dados violada"); 
+            return "redirect:/formulario-castanha";
+        } catch (IOException e) {
+            System.err.println("IO Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Não foi possível ler a imagem");
+            return "redirect:/formulario-castanha";
+        }
+    }
 
     @GetMapping("/formulario-ferramenta")
     public String addToolForm(
         @RequestParam(value = "toolId", required = false) Integer toolId,
         @RequestParam(value = "error", required = false) String errorMessage,
         Model model){
-
+            
+        if (errorMessage != null) {
+            model.addAttribute("error", errorMessage);
+        }
+            
         if (toolId != null) {
             Optional<Tool> optionalTool = toolService.getToolById(toolId);
 
@@ -137,36 +166,42 @@ public class EntityController {
                 model.addAttribute("error", "Ferramenta não encontrada: " + toolId);
             }
         }
-        if (errorMessage != null) {
-            model.addAttribute("error", errorMessage);
-        }
         return "form-tool";
     }
 
     @PostMapping("/adicionar-ferramenta")
     public String addToolToDatabase(
         @RequestParam(value = "toolId", required = false) Integer toolId,
-        @RequestParam("toolName") String toolName,
         @RequestParam("toolImage") MultipartFile toolImage,
-        RedirectAttributes redirectAttributes){
+        @Valid @ModelAttribute Tool tool,
+        BindingResult bindingResult,
+        RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("error", errorMessage);
+            return "redirect:/formulario-ferramenta";
+        }
 
         try {
-            Tool Tool = new Tool();
-            if (toolId != null) Tool.setToolId(toolId);
-            Tool.setToolName(toolName.toUpperCase());
-            Tool.setToolImage(toolImage.getBytes());
-            Tool.setIsDeleted(false);
-            toolService.saveTool(Tool);
+            if (toolId != null) {
+                tool.setToolId(toolId);
+            }
+            tool.setToolName(tool.getToolName().toUpperCase());
+            tool.setToolImage(toolImage.getBytes());
+            tool.setIsDeleted(false);
+            toolService.saveTool(tool);
+
+            return "redirect:/entidades";
         }catch (DataIntegrityViolationException e){
             System.err.println("Data Integrity error " + e.getMostSpecificCause());
-            redirectAttributes.addAttribute("error", "Já existe uma ferramenta com este nome.");
+            redirectAttributes.addAttribute("error", "Integridade de dados violada");
             return "redirect:/formulario-ferramenta";
         }catch (IOException e){
             System.err.println("IO Error: " + e.getMessage());
             redirectAttributes.addAttribute("error", "Não foi possível ler a imagem");
             return "redirect:/formulario-ferramenta";
         }
-        return "redirect:/entidades";
     }
 
     @GetMapping("/formulario-gabarito")
@@ -174,6 +209,10 @@ public class EntityController {
         @RequestParam(value = "templateId", required = false) Integer templateId,
         @RequestParam(value = "error", required = false) String errorMessage,
         Model model){
+
+        if (errorMessage != null) {
+            model.addAttribute("error", errorMessage);
+        }
 
         if (templateId != null) {
             Optional<Template> optionalTemplate = templateService.getTemplateById(templateId);
@@ -185,38 +224,43 @@ public class EntityController {
                 model.addAttribute("error", "Gabarito não encontrado: " + templateId);
             }
         }
-        if (errorMessage != null) {
-            model.addAttribute("error", errorMessage);
-        }
         return "form-template";
     }
 
     @PostMapping("/adicionar-gabarito")
     public String addTemplateToDatabase(
         @RequestParam(value = "templateId", required = false) Integer templateId,
-        @RequestParam("templateName") String templateName,
-        @RequestParam("templateLocation") String templateLocation,
         @RequestParam("templateImage") MultipartFile templateImage,
+        @Valid @ModelAttribute Template template,
+        BindingResult bindingResult,
         RedirectAttributes redirectAttributes){
 
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("error", errorMessage);
+            return "redirect:/formulario-ferramenta";
+        }
+
         try {
-            Template template = new Template();
-            if (templateId != null) template.setTemplateId(templateId);
-            template.setTemplateName(templateName.toUpperCase());
-            template.setTemplateLocation(templateLocation.toUpperCase());
+            if (templateId != null) {
+                template.setTemplateId(templateId);
+            }
+            template.setTemplateName(template.getTemplateName().toUpperCase());
+            template.setTemplateLocation(template.getTemplateLocation().toUpperCase());
             template.setTemplateImage(templateImage.getBytes());
             template.setIsDeleted(false);
             templateService.saveTemplate(template);
+            
+            return "redirect:/entidades";
         }catch (DataIntegrityViolationException e){
             System.err.println("Data Integrity error: " + e.getMessage());
-            redirectAttributes.addAttribute("error", "Já existe um gabarito com este nome");
+            redirectAttributes.addAttribute("error", "Integridade de dados violada");
             return "redirect:/formulario-gabarito";
         }catch (IOException e){
             System.err.println("IO Error: " + e.getMessage());
             redirectAttributes.addAttribute("error", "Não foi possível ler a imagem");
             return "redirect:/formulario-gabarito";
         }
-        return "redirect:/entidades";
     }
 
     @GetMapping("/formulario-morsa")
@@ -224,7 +268,11 @@ public class EntityController {
         @RequestParam(value = "viseId", required = false) Integer viseId,
         @RequestParam(value = "error", required = false) String errorMessage,
         Model model){
-
+            
+        if (errorMessage != null) {
+            model.addAttribute("error", errorMessage);
+        }
+        
         if (viseId != null) {
             Optional<Vise> optionalVise = viseService.getViseById(viseId);
 
@@ -235,38 +283,43 @@ public class EntityController {
                 model.addAttribute("error", "Morsa não encontrado: " + viseId);
             }
         }
-        if (errorMessage != null) {
-            model.addAttribute("error", errorMessage);
-        }
         return "form-vise";
     }
 
     @PostMapping("/adicionar-morsa")
     public String addViseToDatabase(
         @RequestParam(value = "viseId", required = false) Integer viseId,
-        @RequestParam("viseName") String viseName,
-        @RequestParam("viseLocation") String viseLocation,
         @RequestParam("viseImage") MultipartFile viseImage,
+        @Valid @ModelAttribute Vise vise,
+        BindingResult bindingResult,
         RedirectAttributes redirectAttributes){
 
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("error", errorMessage);
+            return "redirect:/formulario-ferramenta";
+        }
+
         try {
-            Vise vise = new Vise();
-            if (viseId != null) vise.setViseId(viseId);
-            vise.setViseName(viseName.toUpperCase());
-            vise.setViseLocation(viseLocation.toUpperCase());
+            if (viseId != null) {
+                vise.setViseId(viseId);
+            }
+            vise.setViseName(vise.getViseName().toUpperCase());
+            vise.setViseLocation(vise.getViseLocation().toUpperCase());
             vise.setViseImage(viseImage.getBytes());
             vise.setIsDeleted(false);
             viseService.saveVise(vise);
+
+            return "redirect:/entidades";
         }catch (DataIntegrityViolationException e){
             System.err.println("Data Integrity error: " + e.getMessage());
-            redirectAttributes.addAttribute("error", "Já existe uma morsa com este nome");
+            redirectAttributes.addAttribute("error", "Integridade de dados violada");
             return "redirect:/formulario-morsa";
         }catch (IOException e){
             System.err.println("IO Error: " + e.getMessage());
             redirectAttributes.addAttribute("error", "Não foi possível ler a imagem");
             return "redirect:/formulario-morsa";
         }
-        return "redirect:/entidades";
     }
 
     @PostMapping("/inativar-entidade")
@@ -365,7 +418,7 @@ public class EntityController {
                 break;
         
             default:
-                redirectAttributes.addAttribute("error", "Erro inesperado: entrar em contato com o administrador");
+                redirectAttributes.addAttribute("error", "Erro inesperado");
                 return "redirect:/entidades";
         }
         return "redirect:/entidades";

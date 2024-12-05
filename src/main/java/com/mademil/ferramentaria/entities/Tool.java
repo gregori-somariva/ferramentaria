@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tools")
@@ -14,9 +16,14 @@ public class Tool {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer toolId;
+
+    @NotBlank(message ="Nome não pode estar vazio")
+    @Size(max = 50, message = "Nome não pode ultrapassar 50 caracteres")
     private String toolName;
+
     @Lob
     private byte[] toolImage;
+
     private Boolean isDeleted;
 
     public Tool() {}
