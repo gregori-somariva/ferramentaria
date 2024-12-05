@@ -3,7 +3,7 @@ package com.mademil.ferramentaria.enums;
 public enum FormType {
     STANDARD,
     MILL,
-    DOUBLE_TURRET;
+    DOUBLETURRET;
 
     public static boolean isValidFormType(String formType) {
         try {

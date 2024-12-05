@@ -4,93 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/side-bar.css">
+    <link rel="stylesheet" href="/css/home.css">
     <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
     <title>Início</title>
 </head>
-<style>
-    
-    body {
-        height: 100vh;
-        font-family: 'Times New Roman', Times, serif;
-    }
 
-    .main{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 90%;
-    }
-
-    .formImage{
-
-        width: 300px;
-        height: 400px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        transition: 0.2s;
-        margin: 15px;
-        text-decoration: none;
-    }
-
-    .formImage:hover{
-        scale: 1.05;
-        cursor: pointer;
-    }
-
-    .imageContainer {
-        border-radius: 15px;
-        border: 1px solid rgb(190, 190, 190);
-        padding: 15px;
-        overflow: hidden;
-        width: 90%;
-        display: flex;
-        justify-content: center; 
-        align-items: center;   
-        box-shadow: 0px 0px 15px rgb(199, 198, 198);
-    }
-    
-    .imageContainer img {
-        width: 100%;
-        height: 100%;
-        object-fit: fill;
-    }
-
-    .wrapper{
-        display: flex;
-        flex-direction: row;
-    }
-
-    .sheetName{
-        font-size: 1.2rem;
-        color: rgb(54, 54, 54);
-        margin-top: 15px;
-    }
-
-    .alert{
-        color: rgb(204, 80, 80);
-        position: absolute;
-        top: 15px;
-    }
-
-    @media (max-width: 1000px){
-
-        body{
-            height: auto;
-            overflow-x: hidden;
-        }
-
-        .main{
-            flex-direction: column;
-            gap: 50px;
-            margin: 50px;
-        }
-
-    }
-</style>
 <body>
 
     <div th:replace="~{fragments/side-bar.html :: side-bar}"></div>
@@ -117,9 +35,9 @@
         </div>
         
         <div class="wrapper">
-            <a href="/formulario-ficha/double-turret" class="formImage">
+            <a href="/formulario-ficha/doubleturret" class="formImage">
                 <div class="imageContainer">
-                    <img src="/icons/process-sheet-double-turret.png" alt="imagem ficha">
+                    <img src="/icons/process-sheet-doubleturret.png" alt="imagem ficha">
                 </div>
                 <span class="sheetName">Torre Dupla</span>
             </a>

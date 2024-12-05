@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/side-bar.css">
     <link rel="stylesheet" href="/css/entities.css">
+    <script src="/scripts/entities.js"></script>
     <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
     <title>Tabela de entidades</title>
 </head>
@@ -173,99 +174,4 @@
     </div>
 
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const entityNames = document.querySelectorAll('.entityName');
-
-    // Hover image functionality
-    entityNames.forEach(function (entityName) {
-        entityName.addEventListener('mouseover', function () {
-            const entityId = entityName.getAttribute('data-entity-id');
-            const entityType = entityName.getAttribute('data-entity-type');
-            const imgPath = `/imagem/${entityType}/${entityId}`;
-            const tableRow = entityName.closest('tr');
-
-            let imgElement = document.createElement('img');
-            imgElement.src = imgPath;
-            imgElement.classList.add('entityImage');
-
-            imgElement.style.visibility = 'hidden';
-            document.body.appendChild(imgElement);
-
-            setTimeout(() => {
-                const imgElementRect = imgElement.getBoundingClientRect();
-                const tableRowRect = tableRow.getBoundingClientRect();
-                const rowBottom = tableRowRect.bottom + window.scrollY;
-                const rowTop = tableRowRect.top + window.scrollY;
-
-                let imgElementTop;
-                const imgElementLeft = imgElementRect.left + imgElementRect.width - imgElementRect.width;
-
-                if (rowBottom + imgElementRect.height > window.innerHeight) {
-                    imgElementTop = rowTop - imgElementRect.height - 10;
-                } else {
-                    imgElementTop = rowBottom + 10;
-                }
-
-                imgElement.style.left = `${imgElementLeft}px`;
-                imgElement.style.top = `${imgElementTop}px`;
-
-                imgElement.style.visibility = 'visible';
-            }, 100);
-        });
-
-        entityName.addEventListener('mouseout', function () {
-            const imgElement = document.querySelector('.entityImage');
-            if (imgElement) {
-                imgElement.remove();
-            }
-        });
-    });
-
-    // Confirm deletion
-    const deactivateForms = document.querySelectorAll('.deactivateForm');
-    deactivateForms.forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            const confirmation = confirm("Confirmar inativação?");
-            if (!confirmation) {
-                event.preventDefault();
-            }
-        });
-    });
-
-    const tabs = document.querySelectorAll('.tableTab');
-    const tables = document.querySelectorAll('.tableWrapper');
-
-    tables.forEach(table => {
-        table.style.display = 'none';
-    });
-
-    if (tabs.length > 0) {
-        tabs[0].classList.add('active'); 
-        const targetId = tabs[0].getAttribute('data-target'); 
-        const selectedTable = document.getElementById(targetId); 
-
-        if (selectedTable) { 
-            selectedTable.style.display = 'flex'
-        }
-    };
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function () {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            tables.forEach(table => {
-                table.style.display = 'none';
-            });
-
-            const targetId = tab.getAttribute('data-target');
-            const selectedTable = document.getElementById(targetId);
-            if (selectedTable) {
-                selectedTable.style.display = 'flex';
-            }
-        });
-    });
-});
-</script>
 </html>

@@ -78,9 +78,9 @@ public class ProcessSheetController {
                 redirectAttributes.addAttribute("submissionId", submissionId);
                 return "redirect:/formulario-ficha/mill";
 
-            case "DOUBLE-TURRET":
+            case "DOUBLETURRET":
             redirectAttributes.addAttribute("submissionId", submissionId);
-            return "redirect:/formulario-ficha/double-turret";
+            return "redirect:/formulario-ficha/doubleturret";
 
             default:
                 redirectAttributes.addAttribute("error", "ERRO CRÍTICO: Sem formulário para tipo " + formType);
@@ -141,8 +141,8 @@ public class ProcessSheetController {
                 model.addAttribute("vises", vises); 
                 return "form-sheet-mill";
 
-            case "DOUBLE-TURRET":
-                return "form-sheet-double-turret";
+            case "DOUBLETURRET":
+                return "form-sheet-doubleturret";
 
             default:
                 return "redirect:/";
@@ -229,8 +229,8 @@ public class ProcessSheetController {
                 case "MILL":
                     return "redirect:/ficha/mill";
 
-                case "DOUBLE-TURRET":
-                    return "redirect:/ficha/double-turret";
+                case "DOUBLETURRET":
+                    return "redirect:/ficha/doubleturret";
 
                 default:
                     redirectAttributes.addAttribute("ERRO CRÍTICO: Não existe documento com este tipo: ", formType);
@@ -299,7 +299,7 @@ public class ProcessSheetController {
 
                         return "process-sheet-mill";
 
-                    case "DOUBLE-TURRET":
+                    case "DOUBLETURRET":
                         //need to separate the tools in two groups because the view has two sections for tools, cannot be arbitrary as the
                         //two different sections represent physical slots in the machines turret
                         List<FormSubmissionToolDTO> groupATools = formSubmissionTools.stream()
@@ -318,7 +318,7 @@ public class ProcessSheetController {
                         model.addAttribute("groupATools", groupATools);
                         model.addAttribute("groupBTools", groupBTools);
 
-                        return "process-sheet-double-turret";
+                        return "process-sheet-doubleturret";
 
                     default:
                         return "redirect:/";
