@@ -158,7 +158,7 @@ public class ProcessSheetController {
         try {
 
             if (!FormType.isValidFormType(formType)) {
-                redirectAttributes.addAttribute("error", "ERRO CRÍTICO: Tipo de formulário inválido");
+                redirectAttributes.addAttribute("error", "ERRO: Tipo de formulário inválido");
                 return "redirect:/";
             }
 

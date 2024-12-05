@@ -1,7 +1,5 @@
 package com.mademil.ferramentaria.dto;
 
-import java.util.List;
-
 import jakarta.validation.constraints.Size;
 
 public class CompleteFormDataDTO {
@@ -59,12 +57,6 @@ public class CompleteFormDataDTO {
     private Integer tool8Length;
     private Integer tool9Length;
     private Integer tool10Length;
-    
-    private List<Integer> toolIds;
-    private List<Integer> toolPositions;
-    private List<Integer> toolLengths;
-    private List<Character> toolGroups;
-
 
     // Getters and setters for non-tool-related fields (no changes needed)
     public Integer getMachineId() {
