@@ -12,8 +12,7 @@ public interface FormSubmissionRepository extends JpaRepository<FormSubmission, 
 
     @Query(value = "SELECT fs.* " +
     "FROM form_submissions fs " +
-    "WHERE fs.is_saved = true " +
-    "AND fs.submission_id IN (" +
+    "WHERE fs.submission_id IN (" +
     "  SELECT MAX(submission_id) " +
     "  FROM form_submissions " +
     "  WHERE is_saved = true " +
