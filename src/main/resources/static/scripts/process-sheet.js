@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     newImageContainer.classList.add('imageContainer');
                     newImageContainer.setAttribute('id', `image-${Date.now()}`);
                     newImageContainer.style.transform = 'translate(0, 0)';
-                    newImageContainer.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image" class="image"><div class="rotation-handle">&circlearrowright;</div>`;
+                    newImageContainer.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image" class="image">`;
                     workspace.appendChild(newImageContainer);
                     initializeInteract(newImageContainer);
                 };
