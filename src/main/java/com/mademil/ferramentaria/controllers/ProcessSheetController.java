@@ -295,8 +295,8 @@ public class ProcessSheetController {
                         //need to separate the tools in two groups because the view has two sections for tools, cannot be arbitrary as the
                         //two different sections represent physical slots in the machines turret
                         List<FormSubmissionToolDTO> groupATools = formSubmissionTools.stream()
-                        .filter(dto -> dto.getToolGroup() != null && dto.getToolGroup() == 'A')
-                        .toList();
+                                .filter(dto -> dto.getToolGroup() != null && dto.getToolGroup() == 'A')
+                                .toList();
                 
                         List<FormSubmissionToolDTO> groupBTools = formSubmissionTools.stream()
                                 .filter(dto -> dto.getToolGroup() != null && dto.getToolGroup() == 'B')
@@ -313,6 +313,7 @@ public class ProcessSheetController {
                         return "process-sheet-doubleturret";
 
                     default:
+                        redirectAttributes.addAttribute("error", "Erro ao direcionar ao formulario " + formType);
                         return "redirect:/";
                 }
            }else{

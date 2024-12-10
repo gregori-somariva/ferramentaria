@@ -90,4 +90,30 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    function filterTableRows(inputElement, tableId) {
+        const filterValue = inputElement.value.toLowerCase();
+        const tableRows = document.querySelectorAll(`#${tableId} tbody tr`);
+    
+        tableRows.forEach(row => {
+            const rowText = row.textContent.toLowerCase();
+            row.style.display = rowText.includes(filterValue) ? '' : 'none';
+        });
+    }
+    
+    document.getElementById('chuckFilterInput').addEventListener('input', function() {
+        filterTableRows(this, 'chucksTable');
+    });
+    
+    document.getElementById('toolFilterInput').addEventListener('input', function() {
+        filterTableRows(this, 'toolsTable');
+    });
+    
+    document.getElementById('templateFilterInput').addEventListener('input', function() {
+        filterTableRows(this, 'templatesTable');
+    });
+    
+    document.getElementById('viseFilterInput').addEventListener('input', function() {
+        filterTableRows(this, 'visesTable');
+    });
 });

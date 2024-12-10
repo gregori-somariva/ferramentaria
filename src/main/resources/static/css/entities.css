@@ -43,6 +43,33 @@ body {
     font-weight: bold;
 }
 
+.filterInputWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.filterInput {
+    text-align: center;
+    background-color: rgba(250, 249, 249, 0.918);
+    border: 1px solid rgb(209, 210, 212);
+    border-radius: 7px;
+    height: 35px;
+    color: black;
+    display: flex;
+    width: 40%;
+}
+
+.filterInput:focus {
+    outline: none;
+    transition: 0.2s;
+    border-color: bisque;
+    background-color: rgb(218, 221, 223);
+    width: 45%;
+}
+
 table {
     border-collapse: collapse;
     text-align: center;
