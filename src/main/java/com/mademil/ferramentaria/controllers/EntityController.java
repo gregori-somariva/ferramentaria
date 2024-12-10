@@ -50,7 +50,8 @@ public class EntityController {
     @Autowired
     UserRepository userRepository;
 
-    // Disallow images to prevent @ModelAttribute from auto binding.
+    // Disallow images to prevent @ModelAttribute from
+    // auto binding the image file to the image field on each entity.
     // Needs to exist because multipart must be converted to byte[] before saving.
     @InitBinder
     public void initBinder(WebDataBinder binder) { 
@@ -64,7 +65,7 @@ public class EntityController {
         Model model){
 
         User user = userRepository.findByUsername(springUser.getUsername())
-        .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (error != null) {
             model.addAttribute("error", error);
@@ -124,7 +125,7 @@ public class EntityController {
     
         try {
             if (chuckId != null) {
-                chuck.setChuckId(chuckId);  // If chuckId is provided, set it on the object to update it
+                chuck.setChuckId(chuckId);
             }
             chuck.setChuckName(chuck.getChuckName().toUpperCase());
             chuck.setChuckLocation(chuck.getChuckLocation().toUpperCase());
@@ -132,7 +133,7 @@ public class EntityController {
             chuck.setIsDeleted(false);  // It is default false in DB but does not hurt to make sure
             chuckService.saveChuck(chuck);
     
-            return "redirect:/entidades";  // Redirect to the entities page after success
+            return "redirect:/entidades";
         } catch (DataIntegrityViolationException e) {
             System.err.println("Data Integrity error: " + e.getMessage());
 

@@ -46,25 +46,18 @@
                         <td th:text="${formSubmission.createdAt}"></td>
                         <td>
                             <div class="actionButtonWrapper">
-                                <form action="/formulario-ficha">
-                                    <input type="hidden" name="submissionId" th:value="${formSubmission.submissionId}">
-                                    <input type="hidden" name="formType" th:value="${formSubmission.formType}">
-                                    <button type="submit" class="updateEntityButton">Atualizar</button>
-                                </form>
-                                <form action="/ficha/historico">
-                                    <input type="hidden" name="machineId" th:value="${formSubmission.machineId}">
-                                    <input type="hidden" name="item" th:value="${formSubmission.item}">
-                                    <input type="hidden" name="operationId" th:value="${formSubmission.operationId}">
-                                    <button type="submit" class="historyButton">Histórico</button>
-                                </form>
-                                <form action="/ficha/documento">
-                                    <input type="hidden" name="submissionId" th:value="${formSubmission.submissionId}">
-                                    <button type="submit" class="documentButton">Documento</button>
-                                </form>
+                                <a th:href="@{/formulario-ficha/{formType}(formType=${formSubmission.formType}) + '?submissionId=' + ${formSubmission.submissionId}}"
+                                   class="updateEntityButton">Atualizar</a>
+                
+                                <a th:href="@{/ficha/historico?machineId=${formSubmission.machineId}&item=${formSubmission.item}&operationId=${formSubmission.operationId}}"
+                                   class="historyButton">Histórico</a>
+                
+                                <a th:href="@{/ficha/documento?submissionId=${formSubmission.submissionId}}"
+                                   class="documentButton">Documento</a>
                             </div>
                         </td>
                     </tr>
-                </tbody>
+                </tbody>                
             </table>
         </div>
     </div>

@@ -61,46 +61,23 @@ public class ProcessSheetController {
     @Autowired
     UserRepository userRepository;
 
-
-    @GetMapping("/formulario-ficha")
-    public String redirectToPropperFormToUpdateDocument(
-        @RequestParam("formType") String formType,
-        @RequestParam(value = "submissionId", required = false) Integer submissionId,
-        RedirectAttributes redirectAttributes) {
-
-        redirectAttributes.addAttribute("submissionId", submissionId);
-
-        switch (formType.toUpperCase()) {
-            case "STANDARD":
-                return "redirect:/formulario-ficha/standard";
-        
-            case "MILL":
-                redirectAttributes.addAttribute("submissionId", submissionId);
-                return "redirect:/formulario-ficha/mill";
-
-            case "DOUBLETURRET":
-            redirectAttributes.addAttribute("submissionId", submissionId);
-            return "redirect:/formulario-ficha/doubleturret";
-
-            default:
-                redirectAttributes.addAttribute("error", "ERRO CRÍTICO: Sem formulário para tipo " + formType);
-                return "redirect:/";
-        }
-    }
-
     @GetMapping("/formulario-ficha/{formType}")
     public String processSheetForm(
         @AuthenticationPrincipal UserDetails springUser,
         @RequestParam(value = "error", required = false) String errorMessage,
         @RequestParam(value = "submissionId", required = false) Integer submissionId,
         @PathVariable("formType") String formType,
+        RedirectAttributes redirectAttributes,
         Model model){
 
-        if (errorMessage != null) {
-            model.addAttribute("error", errorMessage);
+        if (!FormType.isValidFormType(formType)) {
+            redirectAttributes.addAttribute("error", "ERRO: Tipo de formulário inválido");
+            return "redirect:/";
         }
 
-        User user = userRepository.findByUsername(springUser.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+        // These are the attributes every view this controller serves will need
+        User user = userRepository.findByUsername(springUser.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         List<Machine> machines = machineService.getAllMachines();
         List<Operation> operations = operationService.getAllOperations();
         List<Chuck> chucks = chuckService.getAllActiveChucks();
@@ -112,7 +89,12 @@ public class ProcessSheetController {
         model.addAttribute("chucks", chucks);
         model.addAttribute("tools", tools);
 
-        //if the user provides a valid submissionId, the form is prepopulated with the data from that submission.
+        if (errorMessage != null) {
+            model.addAttribute("error", errorMessage);
+        }
+
+        // If the user provides a valid submissionId the form is 
+        // prepopulated with the data from that submission.
         if (submissionId != null) {
             Optional<FormSubmission> optionalFormSubmission = formSubmissionService.getFormSubmissionById(submissionId);
 
@@ -155,14 +137,14 @@ public class ProcessSheetController {
         @ModelAttribute CompleteFormDataDTO completeFormDataDTO,
         RedirectAttributes redirectAttributes) {
 
+        if (!FormType.isValidFormType(formType)) {
+            redirectAttributes.addAttribute("error", "ERRO: Tipo de formulário inválido");
+            return "redirect:/";
+        }
+
+        Integer submissionId;
+
         try {
-
-            if (!FormType.isValidFormType(formType)) {
-                redirectAttributes.addAttribute("error", "ERRO: Tipo de formulário inválido");
-                return "redirect:/";
-            }
-
-            // Create a new FormSubmission object
             FormSubmission formSubmission = new FormSubmission();
 
             // Map data from CompleteFormDataDTO to FormSubmission
@@ -184,10 +166,8 @@ public class ProcessSheetController {
             formSubmission.setFormType(formType.toUpperCase());
             formSubmissionService.saveFormSubmission(formSubmission);
 
-            // Get the submissionId after saving the formSubmission
-            Integer submissionId = formSubmission.getSubmissionId(); 
+            submissionId = formSubmission.getSubmissionId(); 
 
-            // Prepare lists of tool data from CompleteFormDataDTO
             List<Integer> toolIds = Arrays.asList(
                 completeFormDataDTO.getTool1Id(), completeFormDataDTO.getTool2Id(), completeFormDataDTO.getTool3Id(),
                 completeFormDataDTO.getTool4Id(), completeFormDataDTO.getTool5Id(), completeFormDataDTO.getTool6Id(),
@@ -206,7 +186,14 @@ public class ProcessSheetController {
                 completeFormDataDTO.getTool7Length(), completeFormDataDTO.getTool8Length(), completeFormDataDTO.getTool9Length(),
                 completeFormDataDTO.getTool10Length());
 
-            // Grouping tools in 2 groups: A (tools 1-5), B (tools 6-10)
+            // Grouping tools in 2 groups: A (tools 1-5), B (tools 6-10).
+            // This is used to determine where each tool will be shown
+            // in the process-sheet-doubleturret.html, tools from group A will be
+            // in the first toolSectionWrapper div and group B will be in the
+            // second toolSectionWrapper div. 
+            // The form layout (form-sheet-doubleturret.html) is set in a way
+            // that is clear for the user that tools 1 - 5 are for the first
+            // section and 6 - 10 will be shown at the second section.
             List<Character> toolGroups = Arrays.asList(
                 'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'B');
 
@@ -219,23 +206,6 @@ public class ProcessSheetController {
                 }
             }
             formSubmissionToolService.saveAllSubmissionToolsFromList(formSubmissionToolList);
-
-            // Pass submissionId to the document controller because the data is fetched from the database
-            redirectAttributes.addAttribute("submissionId", submissionId);
-            switch (formType.toUpperCase()) {
-                case "STANDARD":
-                    return "redirect:/ficha/standard";
-
-                case "MILL":
-                    return "redirect:/ficha/mill";
-
-                case "DOUBLETURRET":
-                    return "redirect:/ficha/doubleturret";
-
-                default:
-                    redirectAttributes.addAttribute("ERRO CRÍTICO: Não existe documento com este tipo: ", formType);
-                    return "redirect:/";
-            }
         } catch (DataIntegrityViolationException e) {
             System.err.println(e.getMessage());
             redirectAttributes.addAttribute("error", "Erro de integridade de dados");
@@ -245,8 +215,25 @@ public class ProcessSheetController {
             redirectAttributes.addAttribute("error", "Erro inesperado");
             return "redirect:/";
         }
-    }
 
+        redirectAttributes.addAttribute("submissionId", submissionId);
+        switch (formType.toUpperCase()) {
+            case "STANDARD":
+                return "redirect:/ficha/standard";
+
+            case "MILL":
+                return "redirect:/ficha/mill";
+
+            case "DOUBLETURRET":
+                return "redirect:/ficha/doubleturret";
+
+            // This default case should never trigger but I kept it here
+            // as a failsafe to the enum FormType validation method.
+            default:
+                redirectAttributes.addAttribute("error", "Erro ao direcionar ao formulario " + formType);
+                return "redirect:/";
+        }
+    }
 
     @GetMapping("/ficha/{formType}")
     public String serveProcessSheet(
@@ -255,6 +242,11 @@ public class ProcessSheetController {
         @AuthenticationPrincipal UserDetails springUser,
         RedirectAttributes redirectAttributes,
         Model model) {
+
+        if (!FormType.isValidFormType(formType)) {
+            redirectAttributes.addAttribute("error", "ERRO: Tipo de formulário inválido");
+            return "redirect:/";
+        }
 
         if (submissionId != null) {
             User user = userRepository.findByUsername(springUser.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -324,7 +316,7 @@ public class ProcessSheetController {
                         return "redirect:/";
                 }
            }else{
-                redirectAttributes.addAttribute("error", "Documento não encontrado: nenhum formulário com ID: " + submissionId);
+                redirectAttributes.addAttribute("error", "Nenhum formulário com ID: " + submissionId);
                 return "redirect:/";
            }
         }
