@@ -22,6 +22,8 @@
         <button class="tableTab" data-target="toolsTable">Ferramentas</button>
         <button class="tableTab" data-target="templatesTable">Gabaritos</button>
         <button class="tableTab" data-target="visesTable">Morsas</button>
+        <button class="tableTab" data-target="glChucksTable">Castanhas GL</button>
+        <button class="tableTab" data-target="yokeRingsTable">Anel Yoke</button>
     </header>
 
     <div class="entityWrapper">
@@ -51,7 +53,7 @@
                                 <form action="/inativar-entidade" method="POST" class="deactivateForm">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                     <input type="hidden" name="entityIdentifier" value="CHUCK">
-                                    <input type="hidden" name="chuckId" th:value="${chuck.chuckId}">
+                                    <input type="hidden" name="entityId" th:value="${chuck.chuckId}">
                                     <button type="submit" class="deleteEntityButton">Inativar</button>
                                 </form>
                                 <form action="/formulario-castanha">
@@ -90,7 +92,7 @@
                                 <form action="/inativar-entidade" method="POST" class="deactivateForm">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                     <input type="hidden" name="entityIdentifier" value="TOOL">
-                                    <input type="hidden" name="toolId" th:value="${tool.toolId}">
+                                    <input type="hidden" name="entityId" th:value="${tool.toolId}">
                                     <button type="submit" class="deleteEntityButton">Inativar</button>
                                 </form>
                                 <form action="/formulario-ferramenta">
@@ -130,7 +132,7 @@
                                 <form action="/inativar-entidade" method="POST" class="deactivateForm">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                     <input type="hidden" name="entityIdentifier" value="TEMPLATE">
-                                    <input type="hidden" name="templateId" th:value="${template.templateId}">
+                                    <input type="hidden" name="entityId" th:value="${template.templateId}">
                                     <button type="submit" class="deleteEntityButton">Inativar</button>
                                 </form>
                                 <form action="/formulario-gabarito">
@@ -170,7 +172,7 @@
                                 <form action="/inativar-entidade" method="POST" class="deactivateForm">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                     <input type="hidden" name="entityIdentifier" value="VISE">
-                                    <input type="hidden" name="viseId" th:value="${vise.viseId}">
+                                    <input type="hidden" name="entityId" th:value="${vise.viseId}">
                                     <button type="submit" class="deleteEntityButton">Inativar</button>
                                 </form>
                                 <form action="/formulario-morsa">
@@ -184,7 +186,90 @@
                 </tbody>
             </table>
         </div>
+        
+        <div class="tableWrapper" id="glChucksTable">
+            <h2>Castanhas GL <a href="/formulario-castanhagl" class="addEntityLink"> + </a></h2>
+            <div class="filterInputWrapper">
+                <input type="text" id="glChuckFilterInput" class="filterInput" placeholder="Procure por uma castanha...">
+            </div>
+    
+            <table class="glChucksTable">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Localização</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="glChuck : ${glChucks}">
+                        <td class="entityName" 
+                            th:text="${glChuck.glChuckName}" 
+                            th:data-entity-id="${glChuck.glChuckId}" 
+                            th:data-entity-type="castanhagl">Nome</td>
+                        <td th:text="${glChuck.glChuckLocation}">Localização</td>
+                        <td>
+                            <div class="actionButtonWrapper">
+                                <form action="/inativar-entidade" method="POST" class="deactivateForm">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <input type="hidden" name="entityIdentifier" value="GLCHUCK">
+                                    <input type="hidden" name="entityId" th:value="${glChuck.glChuckId}">
+                                    <button type="submit" class="deleteEntityButton">Inativar</button>
+                                </form>
+                                <form action="/formulario-castanhagl">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <input type="hidden" name="glChuckId" th:value="${glChuck.glChuckId}">
+                                    <button type="submit" class="updateEntityButton">Atualizar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+        <div class="tableWrapper" id="yokeRingsTable">
+            <h2>Aneis p. Yoke <a href="/formulario-anelyoke" class="addEntityLink"> + </a></h2>
+            <div class="filterInputWrapper">
+                <input type="text" id="yokeRingFilterInput" class="filterInput" placeholder="Procure por um anel...">
+            </div>
+    
+            <table class="yokeRingsTable">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Localização</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="yokeRing : ${yokeRings}">
+                        <td class="entityName" 
+                            th:text="${yokeRing.yokeRingName}" 
+                            th:data-entity-id="${yokeRing.yokeRingId}" 
+                            th:data-entity-type="anelyoke">Nome</td>
+                        <td th:text="${yokeRing.yokeRingLocation}">Localização</td>
+                        <td>
+                            <div class="actionButtonWrapper">
+                                <form action="/inativar-entidade" method="POST" class="deactivateForm">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <input type="hidden" name="entityIdentifier" value="YOKERING">
+                                    <input type="hidden" name="entityId" th:value="${yokeRing.yokeRingId}">
+                                    <button type="submit" class="deleteEntityButton">Inativar</button>
+                                </form>
+                                <form action="/formulario-anelyoke">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <input type="hidden" name="yokeRingId" th:value="${yokeRing.yokeRingId}">
+                                    <button type="submit" class="updateEntityButton">Atualizar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
 
 </body>
 </html>

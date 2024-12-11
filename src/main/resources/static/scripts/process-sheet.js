@@ -7,55 +7,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
         interact(target)
         .draggable({
-            listeners: {
-                start(event) {
-                    const id = event.target.getAttribute('id');
-                    if (!positions[id]) {
-                        positions[id] = { x: 0, y: 0, angle: 0 };
-                    }
-                },
-                move(event) {
-                    if (event.target === rotationHandle) return;
-                    const target = event.target;
-                    const id = target.getAttribute('id');
-                    positions[id].x += event.dx;
-                    positions[id].y += event.dy;
-                    applyTransforms(target, id);
-                },
+          listeners: {
+            start(event) {
+              const id = event.target.getAttribute('id');
+              if (!positions[id]) {
+                positions[id] = { x: 0, y: 0, angle: 0 };
+              }
             },
-            modifiers: [
-                interact.modifiers.snap({
-                    targets: [interact.snappers.grid({ x: 15, y: 10 })],
-                    range: Infinity,
-                    relativePoints: [{ x: 0, y: 0 }]
-                })
-            ]
+            move(event) {
+              if (event.target !== rotationHandle) {
+                const target = event.target;
+                const id = target.getAttribute('id');
+                positions[id].x += event.dx;
+                positions[id].y += event.dy;
+                applyTransforms(target, id);
+              }
+            },
+          },
+          modifiers: [
+            interact.modifiers.snap({
+              targets: [interact.snappers.grid({ x: 5, y: 5 })],
+              range: Infinity,
+              relativePoints: [{ x: 0, y: 0 }],
+            }),
+            interact.modifiers.restrict({
+              restriction: 'parent',  
+              elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
+              endOnly: true,
+            }),
+          ],
         })
         .resizable({
-            edges: { left: false, right: true, bottom: true, top: false },
-            listeners: {
-                move(event) {
-                    const target = event.target;
-                    const { width, height } = event.rect;
-                    target.style.width = `${width}px`;
-                    target.style.height = `${height}px`;
-                    const img = target.querySelector('img');
-                    if (img) {
-                        img.style.width = '100%'; 
-                        img.style.height = '100%';
-                    }
-                    applyTransforms(target, target.getAttribute('id'));
-                }
+          edges: { left: false, right: true, bottom: true, top: false },
+          listeners: {
+            move(event) {
+              const target = event.target;
+              const { width, height } = event.rect;
+              target.style.width = `${width}px`;
+              target.style.height = `${height}px`;
+              const img = target.querySelector('img');
+              if (img) {
+                img.style.width = '100%';
+                img.style.height = '100%';
+              }
+              applyTransforms(target, target.getAttribute('id'));
             },
-            modifiers: [
-                interact.modifiers.restrictEdges({ outer: 'parent' }),
-                interact.modifiers.restrictSize({
-                    min: { width: 50, height: 50 },
-                    max: { width: 300, height: 500 }
-                })
-            ],
-        });
-    }
+          },
+          modifiers: [
+            interact.modifiers.restrictEdges({ outer: 'parent' }),
+            interact.modifiers.restrictSize({
+              min: { width: 50, height: 50 },
+              max: { width: 300, height: 500 },
+            }),
+          ],
+        });      
+    }      
 
     function applyTransforms(element, id) {
         const pos = positions[id];

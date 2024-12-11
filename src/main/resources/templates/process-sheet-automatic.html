@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/process-sheet-automatic.css">
+    <script src="/scripts/interact.min.js"></script>
+    <script src="/scripts/process-sheet.js"></script>
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <title>Ficha de Processo Usinagem</title>
+</head>
+
+<body>
+    <div class="main">
+        
+        <div class="processSheetWrapper" id="processSheetWrapper">
+            <div class="processSheetHeader">
+                <div class="topLogoContainer">
+                    <img src="/icons/logo_mademil.png" alt="">
+                </div>
+                FICHA DE PROCESSO USINAGEM
+            </div>
+            <div class="row">
+                <div id="item" class="label">Código produto</div>
+                <div id="fieldItem" class="field" th:text="${formSubmission.item}">2567.25679</div>
+                <div id="itemDescription" class="label">Descrição</div>
+                <div id="fieldItemDescription" class="field" th:text="${formSubmission.itemDescription}">POLIA DE FERRO 350 B2 F.20 CH.9</div>
+            </div>
+
+            <div class="subheader" id="subTitle">DADOS DO PROCESSO DE USINAGEM</div>
+
+            <div class="row">
+                <div id="machineName" class="label">Máquina</div>
+                <div id="fieldMachineName" class="field" th:text="${machine.machineName}">CNC 24 - QTS 150 ms galax</div>
+                <div id="operationId" class="label">Operação</div>
+                <div id="fieldOperationId" class="field" th:text="${formSubmission.operationId}"></div>
+                <div id="chuckPressure" class="label">Pressão placa</div>
+                <div id="fieldChuckPressure" class="field" th:text="${formSubmission.chuckPressure} + 'Kg'"></div>
+                <div id="cycleTime" class="label">Tempo</div>
+                <div id="fieldCycleTime" class="field" th:text="${cycleTime}"></div>
+            </div>
+
+            <div class="row">
+                <div id="chuckName" class="label">Castanha</div>
+                <div id="fieldChuckName" class="field" th:text="${chuck.chuckName + '    ' + chuck.chuckLocation}"></div>
+                <div id="ncName" class="label">Programa</div>
+                <div id="fieldNcName" class="field" th:text="${formSubmission.ncName}">2567.25679L2-5</div>
+                <div id="holdPressure" class="label">Pressão ponto</div>
+                <div id="fieldHoldPressure" class="field" th:text="${formSubmission.holdPressure != null ? formSubmission.holdPressure + 'Kg': ''}"></div>
+
+                <div id="piecesPerHour" class="label">Pç hora</div>
+                <div id="fieldPiecesPerHour" class="field" th:text="${piecesPerHour}"></div>
+            </div>
+
+            <div class="row">
+
+                <div id="glSpeed" class="label">Velocidade do GL</div>
+                <div id="fieldGlSpeed" class="field" th:text="${formSubmission.glSpeed != null ? formSubmission.glSpeed + '%' : ''}">100%</div>
+
+                <div id="glNcName" class="label">Programa GL</div>
+                <div id="fieldGlNcName" class="field" th:text="${formSubmission.glNcName != null ? formSubmission.glNcName : ''}"></div>
+
+                <div id="repetitionAmount" class="label">Nº de repetições</div>
+                <div id="fieldRepetitionAmount" class="field" th:text="${formSubmission.repetitionAmount != null ? formSubmission.repetitionAmount : ''}">1000</div>
+
+                <div id="piecesPerFork" class="label">Peças por garfo</div>
+                <div id="fieldPiecesPerFork" class="field" th:text="${formSubmission.piecesPerFork != null ? formSubmission.piecesPerFork : ''}"></div>
+            </div>
+
+            <div class="row">
+                <div id="observation" class="label">Observação</div>
+                <input type="text" id="observationInput" th:value="${formSubmission.holdPressure == null ? 'Não precisa utilizar ponto' : ''}">
+            </div>
+
+            <div class="subheaderWrapper">
+                <div class="subheader" id="robotSetupInfoSubheader">INFORMAÇÕES DE SETUP ROBÔ</div>
+                <div class="subheader" id="turningSetupInfoSubheader">INFORMAÇÕES DE SETUP TORNO</div>
+            </div>
+
+            <div class="workspaceWrapper">
+                <div class="workspace" id="glChuckWorkspace">
+
+                    <div class="glChuckInfoWrapper">
+                        <div id="glChuckHeader">Castanha GL</div>
+                        <div class="row">
+                            <div id="glChuck" class="label">Nome</div>
+                            <div id="fieldGlChuck" class="field" th:text="${glChuck != null ? glChuck.glChuckName : ''}" ></div>
+                        </div>
+                        <div class="row">
+                            <div id="uhInsert" class="label">Inserto UH</div>
+                            <div id="fieldUhInsert" class="field"></div>
+                        </div>
+                        <div class="row">
+                            <div id="lhInsert" class="label">Inserto LH</div>
+                            <div id="fieldLhInsert" class="field"></div>
+                        </div>
+                    </div>
+
+                    <div class="imageContainer" id="glChuckImage" style="transform: translate(0, 0);">
+                        <img class="image" src="#" th:src="@{/imagem/castanhagl/{id}(id=${formSubmission.glChuckId})}" alt="Imagem do castanha gl">
+                    </div>
+
+                </div>
+            
+                <div class="workspace" id="yokeChuckWorkspace">
+
+                    <div class="glChuckInfoWrapper">
+                        <div id="yokeRingHeader">Anel p. Yoke</div>
+                        <div class="row">
+                            <div id="yokeRing" class="label">Nome</div>
+                            <div id="fieldYokeRing" class="field" th:text="${yokeRing != null ? yokeRing.yokeRingName : ''}"></div>
+                        </div>
+                    </div>
+
+                    <div class="imageContainer" id="yokeRingImage" style="transform: translate(0, 0);">
+                        <img class="image" src="#" th:src="@{/imagem/anelyoke/{id}(id=${formSubmission.yokeRingId})}" alt="Imagem do anel yoke">
+                    </div>
+
+                </div>
+                
+                <div class="workspace" id="turningWorkspace">
+                    <div class="imageContainer" id="chuckImage" style="transform: translate(0, 0);">
+                        <img class="image" src="#" th:src="@{/imagem/castanha/{id}(id=${formSubmission.chuckId})}" alt="Imagem da Castanha">
+                    </div>
+    
+                    <div th:each="formSubmissionTool, iter : ${formSubmissionTools}" class="imageContainer" 
+                        th:attr="id='image-tool-' + ${iter.index}" style="transform: translate(0, 0);">
+                        <img class="image" src="#" th:src="@{/imagem/ferramenta/{id}(id=${formSubmissionTool.toolId})}" alt="Imagem da Ferramenta">
+                    </div>
+                </div>
+            </div>
+
+            <div class="alterationSectionWrapper">
+                    
+                <div class="row" id="alterationRow">
+                    <div id="alteration" class="subheader">Alterações</div>
+                    <div id="data" class="subheader">Data</div>
+                </div>
+
+
+                <div class="toolRow">
+                    <input type="text" class="alterationInput">
+                    <input type="text" class="dataInput">
+                </div>
+
+                <div class="toolRow">
+                    <input type="text" class="alterationInput">
+                    <input type="text" class="dataInput">
+                </div>
+
+                <div class="toolRow">
+                    <input type="text" class="alterationInput">
+                    <input type="text" class="dataInput">
+                </div>
+                
+                <div class="toolRow">
+                    <input type="text" class="alterationInput">
+                    <input type="text" class="dataInput">
+                </div>
+                
+                <div class="toolRow">
+                    <input type="text" class="alterationInput">
+                    <input type="text" class="dataInput">
+                </div>
+                
+                <div class="toolRow">
+                    <input type="text" class="alterationInput">
+                    <input type="text" class="dataInput">
+                </div>
+            </div>
+
+            <div class="toolSectionWrapper">
+                <div class="subheader">FERRAMENTAS</div>
+                
+                <!-- First Row (index 0) -->
+                <div class="toolRow">
+                    <div class="toolLabel">Ferramenta</div>
+                    <div id="fieldTool0" class="field" th:text="${formSubmissionTools.size() > 0 && formSubmissionTools.get(0) != null && formSubmissionTools.get(0).toolName != '' ? formSubmissionTools.get(0).toolName + (formSubmissionTools.get(0).toolLength != null ? ' (' + formSubmissionTools.get(0).toolLength + ' mm)' : '') : ''}"></div>
+                    <div class="turretLabel">Posição Torre</div>
+                    <div id="fieldTurretPosition0" class="field" th:text="${formSubmissionTools.size() > 0 && formSubmissionTools.get(0) != null ? formSubmissionTools.get(0).toolPosition : ''}"></div>
+                </div>
+                
+                <!-- Second Row (index 1) -->
+                <div class="toolRow">
+                    <div class="toolLabel">Ferramenta</div>
+                    <div id="fieldTool1" class="field" th:text="${formSubmissionTools.size() > 1 && formSubmissionTools.get(1) != null && formSubmissionTools.get(1).toolName != '' ? formSubmissionTools.get(1).toolName + (formSubmissionTools.get(1).toolLength != null ? ' (' + formSubmissionTools.get(1).toolLength + ' mm)' : '') : ''}"></div>
+                    <div class="turretLabel">Posição Torre</div>
+                    <div id="fieldTurretPosition1" class="field" th:text="${formSubmissionTools.size() > 1 && formSubmissionTools.get(1) != null ? formSubmissionTools.get(1).toolPosition : ''}"></div>
+                </div>
+            
+                <!-- Third Row (index 2) -->
+                <div class="toolRow">
+                    <div class="toolLabel">Ferramenta</div>
+                    <div id="fieldTool2" class="field" th:text="${formSubmissionTools.size() > 2 && formSubmissionTools.get(2) != null && formSubmissionTools.get(2).toolName != '' ? formSubmissionTools.get(2).toolName + (formSubmissionTools.get(2).toolLength != null ? ' (' + formSubmissionTools.get(2).toolLength + ' mm)' : '') : ''}"></div>
+                    <div class="turretLabel">Posição Torre</div>
+                    <div id="fieldTurretPosition2" class="field" th:text="${formSubmissionTools.size() > 2 && formSubmissionTools.get(2) != null ? formSubmissionTools.get(2).toolPosition : ''}"></div>
+                </div>
+                
+                <!-- Fourth Row (index 3) -->
+                <div class="toolRow">
+                    <div class="toolLabel">Ferramenta</div>
+                    <div id="fieldTool3" class="field" th:text="${formSubmissionTools.size() > 3 && formSubmissionTools.get(3) != null && formSubmissionTools.get(3).toolName != '' ? formSubmissionTools.get(3).toolName + (formSubmissionTools.get(3).toolLength != null ? ' (' + formSubmissionTools.get(3).toolLength + ' mm)' : '') : ''}"></div>
+                    <div class="turretLabel">Posição Torre</div>
+                    <div id="fieldTurretPosition3" class="field" th:text="${formSubmissionTools.size() > 3 && formSubmissionTools.get(3) != null ? formSubmissionTools.get(3).toolPosition : ''}"></div>
+                </div>
+            
+                <!-- Fifth Row (index 4) -->
+                <div class="toolRow">
+                    <div class="toolLabel">Ferramenta</div>
+                    <div id="fieldTool4" class="field" th:text="${formSubmissionTools.size() > 4 && formSubmissionTools.get(4) != null && formSubmissionTools.get(4).toolName != '' ? formSubmissionTools.get(4).toolName + (formSubmissionTools.get(4).toolLength != null ? ' (' + formSubmissionTools.get(4).toolLength + ' mm)' : '') : ''}"></div>
+                    <div class="turretLabel">Posição Torre</div>
+                    <div id="fieldTurretPosition4" class="field" th:text="${formSubmissionTools.size() > 4 && formSubmissionTools.get(4) != null ? formSubmissionTools.get(4).toolPosition : ''}"></div>
+                </div>
+            
+                <div class="measurementRow">
+                    <div class="label" id="measurement">Instumento de medição</div>
+                    <input type="text" id="measurementInput1" class="measurementInput" required>
+                    <input type="text" id="measurementInput2" class="measurementInput">
+                    <input type="text" id="measurementInput3" class="measurementInput">
+                </div>
+            </div>
+            
+
+            <div class="authorWrapper">
+                <div class="authorRow">
+                    <div id="developed" class="label">Desenvolvido</div>
+                </div>
+                <div class="authorRow">
+                    <input type="text" id="developedInput" th:value="${user.fullName}" required>
+                    <div class="timeStamp">
+                        <div th:text="${dateString != null ?  dateString : 'Erro ao buscar pela data atual'}">15/24/2024 18:37</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        <form action="/salvar-ficha" method="POST" id="mainForm">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input type="hidden" name="submissionId" th:value="${formSubmission.submissionId}">
+            <input type="hidden" name="htmlData" id="htmlDataInput">
+            <button type="submit" id="save-button" style="border: none; background: none; padding: 0;">
+                <img src="/icons/save-button.png" alt="Salvar" >
+            </button>
+        </form>
+
+        <input type="file" id="imageUpload" accept="image/*" style="display:none" />
+        <div class="camera-button" id="cameraButton"> <img src="/icons/camera-button.png" alt=""></div>
+
+    </div>
+</body>
+</html>

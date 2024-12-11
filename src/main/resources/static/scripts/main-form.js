@@ -110,6 +110,8 @@ document.addEventListener('DOMContentLoaded', function () {
         isValid = isValid && checkInputInDatalist('operationInput', 'operationDatalist');
         isValid = isValid && checkInputInDatalist('templateInput', 'templateDatalist');
         isValid = isValid && checkInputInDatalist('viseInput', 'viseDatalist');
+        isValid = isValid && checkInputInDatalist('glChuckInput', 'glChuckDatalist');
+        isValid = isValid && checkInputInDatalist('yokeRingInput', 'yokeRingDatalist');
 
         for (let i = 1; i <= 10; i++) {
             isValid = isValid && checkInputInDatalist(`tool${i}Input`, 'toolDatalist');

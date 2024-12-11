@@ -1,0 +1,484 @@
+body {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+div, input{
+    box-sizing: border-box;
+}
+
+input{
+    border: 0;
+}
+
+input:focus{
+    outline: 1px dotted rgb(44, 138, 155);
+}
+
+.processSheetWrapper{
+    width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.processSheetHeader{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(228, 226, 226);
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    border: 1px dotted black;
+    position: relative;
+}
+
+.topLogoContainer{
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 150px;
+}
+
+.topLogoContainer img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    border: 1px dotted black;
+    border-bottom: 0;
+    width: 100%;
+}
+
+.label,
+.toolLabel,
+.turretLabel{
+    background-color: rgb(238, 238, 238);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    height: 16px;
+}
+
+.field{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    height: 16px;
+    background-color: white;
+}
+
+.subheader{
+    width: 100%;
+    background-color: rgb(228, 226, 226);
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px dotted black;
+    padding: 1px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#subTitle{
+    background-color: white;
+}
+
+
+#item,
+#machineName,
+#chuckName,
+.toolLabel,
+#observation,
+.turretLabel,
+#glSpeed{
+    width: 110px;
+    border-right: 1px dotted;
+}
+
+
+#fieldItem,
+#fieldMachineName,
+#fieldChuckName,
+#fieldGlSpeed{
+    width: 200px;
+    border-right: 1px dotted;
+}
+
+#fieldItemDescription{
+    flex: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    justify-content: left;
+    padding-left: 5px;
+}
+
+#itemDescription,
+#operationId,
+#ncName,
+#glNcName{
+    width: 120px;
+    border-right: 1px dotted;
+}
+
+#fieldOperationId,
+#fieldNcName,
+#fieldGlNcName{
+    width: 160px;
+    border-right: 1px dotted;
+}
+
+#chuckPressure,
+#holdPressure,
+#repetitionAmount{
+    width: 110px;
+    border-right: 1px dotted;
+}
+
+#fieldChuckPressure,
+#fieldHoldPressure,
+#fieldRepetitionAmount{
+    width: 110px;
+    border-right: 1px dotted;
+}
+
+#cycleTime,
+#piecesPerHour,
+#piecesPerFork{
+    width: 110px;
+    border-right: 1px dotted;
+}
+
+#fieldCycleTime,
+#fieldPiecesPerHour,
+#fieldPiecesPerFork{
+    flex: auto;
+}
+
+#observation{
+    height: 40px;
+}
+
+#observationInput{
+    flex: auto;
+    font-size: 11px;
+}
+
+.subheaderWrapper{
+    width: 100%;
+    background-color: rgb(228, 226, 226);
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+#robotSetupInfoSubheader,
+#turningSetupInfoSubheader{
+    font-size: 13px;
+    font-weight: 300;
+}
+
+#robotSetupInfoSubheader{
+    width: 450px;
+}
+
+#turningSetupInfoSubheader{
+    width: 550px;
+}
+
+
+
+#save-button {
+    cursor: pointer;
+    position: relative;
+    position: fixed;
+    z-index: 1000;
+    bottom: 50px;
+    right: 100px;
+    width: 50px;
+    height:  auto;
+}
+
+.toolSectionWrapper{
+    display: flex;
+    flex-direction: column;
+    width: 549px;
+    position: absolute;
+    right: 0;
+    top: 502px;
+}
+
+.toolRow{
+    display: flex;
+    flex-direction: row;
+    border: 1px dotted black;
+    border-top: 0;
+    width: 100%;
+}
+
+.measurementRow{
+    display: flex;
+    flex-direction: row;
+    border: 1px dotted black;
+    border-top: 0;
+    width: 100%;
+    margin-bottom: 3px;
+}
+
+#fieldTool0,
+#fieldTool1,
+#fieldTool2,
+#fieldTool3,
+#fieldTool4{
+    width: 304px;
+    border-right: 1px dotted;
+}
+
+#fieldTurretPosition0,
+#fieldTurretPosition1,
+#fieldTurretPosition2,
+#fieldTurretPosition3,
+#fieldTurretPosition4{
+    flex: auto;
+}
+
+#measurement{
+    font-weight: bold;
+    height: 16px;
+    width: 149px;
+    text-align: center;
+    border-right: 1px dotted;
+}
+
+
+.measurementInput{
+    width: 133px;
+    overflow: hidden;
+    font-size: 11px;
+    text-align: center;
+}
+
+#measurementInput1,
+#measurementInput2{
+    border-right: 1px dotted;
+}
+
+#alteration,
+.alterationInput{
+    width: 379px;
+}
+
+.alterationInput{
+    font-size: 12px;
+    border-right: 1px dotted;
+}
+
+#data{
+    width: 69px;
+    border-left: 0;
+}
+
+.dataInput{
+    width: 68px;
+    text-align: center;
+    font-size: 12px;
+}
+
+
+.authorRow{
+    display: flex;
+    flex-direction: row;
+
+}
+
+.authorWrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px dotted black;
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    bottom: -155px;
+    background-color: rgba(224, 224, 224, 0.596);
+}
+
+#developed,
+#developedInput,
+#approved,
+#approvedInput{
+    width: 150px;
+    height: 25px;
+    text-align: center;
+}
+#developed,
+#developedInput{
+    border-right: 1px dotted;
+}
+
+.timeStamp{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 11px;
+    color: rgb(0, 0, 0);
+}
+
+#save-button:hover {
+    transition: 0.2s;
+    bottom: 55px;
+}
+
+.camera-button img, #save-button img { 
+    width: 100%; height: auto; 
+}
+
+.camera-button {
+    cursor: pointer;
+    position: relative;
+    position: fixed;
+    z-index: 1000;
+    bottom: 50px;
+    right: 25px;
+    width: 50px;
+    height: auto;
+}
+
+.camera-button:hover {
+    transition: 0.2s;
+    bottom: 55px;
+}
+
+
+.imageContainer {
+    position: absolute;
+    border: 1px dotted grey;
+    z-index: 10;
+    max-width: 300px;
+    top: 0;
+    left: 0;
+}
+
+.imageContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    z-index: 10;
+}
+
+.imageContainer,
+.imageContainer * {
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+.workspace{
+    border: 1px dotted black;
+    height: 300px;
+}
+
+.workspaceWrapper{
+    display: flex;
+    flex-direction: row;
+}
+
+#glChuckWorkspace,
+#yokeChuckWorkspace{
+    border-right: 0;
+    position: relative;
+    width: 225px;
+}
+
+#turningWorkspace{
+    position: relative;
+    width: 550px;
+}
+
+#glChuckHeader,
+#yokeRingHeader{
+    width: 100%;
+    background-color: rgb(228, 226, 226);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+}
+
+#glChuck,
+#uhInsert,
+#lhInsert,
+#yokeRing{
+    width: 80px;
+    border-right: 1px dotted black;
+}
+
+#fieldGlChuck,
+#fieldUhInsert,
+#fieldLhInsert,
+#fieldYokeRing{
+    flex: auto;
+}
+
+#lhInsert,
+#fieldLhInsert,
+#yokeRing,
+#fieldYokeRing{
+    border-bottom: 1px dotted black;
+}
+
+.alterationSectionWrapper{
+    position: absolute;
+    left:0;
+    width: 448px;
+    top: 502px;
+}
+
+#alterationRow{
+    border: 0;
+}
+
+#yokeRingImage{
+    top: 50px;
+    left: 5px;
+    max-width: 200px;
+}
+
+#glChuckImage{
+    top: 80px;
+    left: 5px;
+    max-width: 200px;
+}
+
+@media (max-width: 750px) {
+    body {
+        justify-content: left;
+    }
+}
+
+@media print {
+    #save-button {
+        display: none !important;
+    }
+}

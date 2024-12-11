@@ -116,4 +116,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('viseFilterInput').addEventListener('input', function() {
         filterTableRows(this, 'visesTable');
     });
+
+    document.getElementById('glChuckFilterInput').addEventListener('input', function() {
+        filterTableRows(this, 'glChucksTable');
+    });
+
+    document.getElementById('yokeRingFilterInput').addEventListener('input', function() {
+        filterTableRows(this, 'yokeRingsTable');
+    });
 });

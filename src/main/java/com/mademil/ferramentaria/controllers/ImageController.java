@@ -1,12 +1,16 @@
 package com.mademil.ferramentaria.controllers;
 
 import com.mademil.ferramentaria.entities.Chuck;
+import com.mademil.ferramentaria.entities.GlChuck;
+import com.mademil.ferramentaria.entities.YokeRing;
 import com.mademil.ferramentaria.entities.Tool;
 import com.mademil.ferramentaria.entities.Template;
 import com.mademil.ferramentaria.entities.Vise;
 import com.mademil.ferramentaria.service.ChuckService;
 import com.mademil.ferramentaria.service.TemplateService;
 import com.mademil.ferramentaria.service.ViseService;
+import com.mademil.ferramentaria.service.GlChuckService;
+import com.mademil.ferramentaria.service.YokeRingService;
 import com.mademil.ferramentaria.service.ToolService;
 
 import org.springframework.http.MediaType;
@@ -35,6 +39,12 @@ public class ImageController {
 
     @Autowired
     private ViseService viseService;
+
+    @Autowired
+    private GlChuckService glChuckService;
+
+    @Autowired
+    private YokeRingService yokeRingService;
 
     private <T> ResponseEntity<byte[]> getImage(
         Function<Integer, Optional<T>> findEntityById,
@@ -71,5 +81,15 @@ public class ImageController {
     @GetMapping("/morsa/{id}")
     public ResponseEntity<byte[]> getViseImage(@PathVariable("id") Integer id) {
         return getImage(viseService::getViseById, Vise::getViseImage, id);
+    }
+
+    @GetMapping("/castanhagl/{id}")
+    public ResponseEntity<byte[]> getGlChuckImage(@PathVariable("id") Integer id) {
+        return getImage(glChuckService::getGlChuckById, GlChuck::getGlChuckImage, id);
+    }
+
+    @GetMapping("/anelyoke/{id}")
+    public ResponseEntity<byte[]> getYokeRingImage(@PathVariable("id") Integer id) {
+        return getImage(yokeRingService::getYokeRingById, YokeRing::getYokeRingImage, id);
     }
 }

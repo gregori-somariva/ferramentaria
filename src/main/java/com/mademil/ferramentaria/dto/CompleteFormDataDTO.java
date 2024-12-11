@@ -10,6 +10,12 @@ public class CompleteFormDataDTO {
     private Integer secondChuckId;
     private Integer templateId;
     private Integer viseId;
+    private Integer glChuckId;
+    private Integer yokeRingId;
+    private Integer repetitionAmount;
+    private Integer glSpeed;
+    private Integer piecesPerFork;
+    private String glNcName;
 
     @Size(max = 50, message = "Máximo de caracteres atingido para ITEM (50)")
     private String item;
@@ -409,5 +415,53 @@ public class CompleteFormDataDTO {
     
     public void setTool10Length(Integer tool10Length) {
         this.tool10Length = tool10Length;
+    }
+
+    public Integer getGlChuckId() {
+        return glChuckId;
+    }
+
+    public void setGlChuckId(Integer glChuckId) {
+        this.glChuckId = glChuckId;
+    }
+
+    public Integer getYokeRingId() {
+        return yokeRingId;
+    }
+
+    public void setYokeRingId(Integer yokeRingId) {
+        this.yokeRingId = yokeRingId;
+    }
+
+    public Integer getRepetitionAmount() {
+        return repetitionAmount;
+    }
+
+    public void setRepetitionAmount(Integer repetitionAmount) {
+        this.repetitionAmount = repetitionAmount;
+    }
+
+    public Integer getGlSpeed() {
+        return glSpeed;
+    }
+
+    public void setGlSpeed(Integer glSpeed) {
+        this.glSpeed = glSpeed;
+    }
+
+    public Integer getPiecesPerFork() {
+        return piecesPerFork;
+    }
+
+    public void setPiecesPerFork(Integer piecesPerFork) {
+        this.piecesPerFork = piecesPerFork;
+    }
+
+    public String getGlNcName() {
+        return glNcName;
+    }
+
+    public void setGlNcName(String glNcName) {
+        this.glNcName = glNcName;
     }
 }

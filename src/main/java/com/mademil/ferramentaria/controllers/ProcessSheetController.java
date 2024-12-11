@@ -59,6 +59,12 @@ public class ProcessSheetController {
     ViseService viseService;
 
     @Autowired
+    GlChuckService glChuckService;
+
+    @Autowired
+    YokeRingService yokeRingService;
+
+    @Autowired
     UserRepository userRepository;
 
     @GetMapping("/formulario-ficha/{formType}")
@@ -126,6 +132,14 @@ public class ProcessSheetController {
             case "DOUBLETURRET":
                 return "form-sheet-doubleturret";
 
+            case "AUTOMATIC":
+                List<GlChuck> glChucks = glChuckService.getAllActiveGlChucks();
+                List<YokeRing> yokeRings = yokeRingService.getAllActiveYokeRings();
+
+                model.addAttribute("glChucks", glChucks);
+                model.addAttribute("yokeRings", yokeRings);
+                return "form-sheet-automatic";
+
             default:
                 return "redirect:/";
         }
@@ -164,6 +178,12 @@ public class ProcessSheetController {
             formSubmission.setCreatedAt(LocalDateTime.now());
             formSubmission.setIsSaved(false);
             formSubmission.setFormType(formType.toUpperCase());
+            formSubmission.setGlChuckId(completeFormDataDTO.getGlChuckId());
+            formSubmission.setYokeRingId(completeFormDataDTO.getYokeRingId());
+            formSubmission.setGlSpeed(completeFormDataDTO.getGlSpeed());
+            formSubmission.setRepetitionAmount(completeFormDataDTO.getRepetitionAmount());
+            formSubmission.setGlNcName(completeFormDataDTO.getGlNcName());
+            formSubmission.setPiecesPerFork(completeFormDataDTO.getPiecesPerFork());
             formSubmissionService.saveFormSubmission(formSubmission);
 
             submissionId = formSubmission.getSubmissionId(); 
@@ -227,6 +247,9 @@ public class ProcessSheetController {
             case "DOUBLETURRET":
                 return "redirect:/ficha/doubleturret";
 
+            case "AUTOMATIC":
+                return "redirect:/ficha/automatic";
+
             // This default case should never trigger but I kept it here
             // as a failsafe to the enum FormType validation method.
             default:
@@ -256,15 +279,14 @@ public class ProcessSheetController {
                 FormSubmission formSubmission = optionalFormSubmission.get();
                 List<FormSubmissionToolDTO> formSubmissionTools = formSubmissionToolService.getAllToolsDTOBySubmissionId(submissionId);
                 Machine machine = machineService.getMachineById(formSubmission.getMachineId()).orElse(null);
-
+                String cycleTime = DateAndTimeParser.formatCycleTime(formSubmission.getCycleTime());
+                Integer piecesPerHour = 3600 / formSubmission.getCycleTime(); //cycle time is in seconds in the db
+                String dateString = DateAndTimeParser.parseTimesTampIntoCustomFormat(formSubmission.getCreatedAt()); //dd/mm/yy - hh:mm:ss
+                
                 if (formSubmission.getChuckId() != null) {
                     Chuck chuck = chuckService.getChuckById(formSubmission.getChuckId()).orElse(null);
                     model.addAttribute("chuck", chuck);
                 };
-
-                String cycleTime = DateAndTimeParser.formatCycleTime(formSubmission.getCycleTime());
-                Integer piecesPerHour = 3600 / formSubmission.getCycleTime(); //cycle time is in seconds in the db
-                String dateString = DateAndTimeParser.parseTimesTampIntoCustomFormat(formSubmission.getCreatedAt()); //dd/mm/yy - hh:mm:ss
                 
                 model.addAttribute("formSubmission", formSubmission);
                 model.addAttribute("formSubmissionTools", formSubmissionTools);
@@ -311,6 +333,19 @@ public class ProcessSheetController {
                         model.addAttribute("groupBTools", groupBTools);
 
                         return "process-sheet-doubleturret";
+
+                    case "AUTOMATIC":
+                        if (formSubmission.getGlChuckId() != null) {
+                            GlChuck glChuck = glChuckService.getGlChuckById(formSubmission.getGlChuckId()).orElse(null);
+                            model.addAttribute("glChuck", glChuck);
+                        };
+
+                        if (formSubmission.getYokeRingId() != null) {
+                            YokeRing yokeRing = yokeRingService.getYokeRingById(formSubmission.getYokeRingId()).orElse(null);
+                            model.addAttribute("yokeRing", yokeRing);
+                        };
+                        
+                        return "process-sheet-automatic";
 
                     default:
                         redirectAttributes.addAttribute("error", "Erro ao direcionar ao formulario " + formType);

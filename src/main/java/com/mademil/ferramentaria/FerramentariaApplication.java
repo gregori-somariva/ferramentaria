@@ -8,4 +8,4 @@ public class FerramentariaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FerramentariaApplication.class, args	);
 	}
-}				
+}	

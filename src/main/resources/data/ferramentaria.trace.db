@@ -4344,3 +4344,60 @@ alter column item data type varchar(50) [50004-224]
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1575)
+2024-12-11 11:40:25.625472-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table GL_CHUCKS (\000d\000a\000d\000agl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,\000d\000agl_chuck_name VARCHAR(50) NOT NULL\000d\000a[*]gl_chuck_location VARCHAR(100) NOT NULL\000d\000agl_chuck_image BLOB NOT NULL,\000d\000ais_deleted BOOLEAN NOT NULL DEFAULT FALSE\000d\000a)"; expected "DEFAULT, GENERATED, ON UPDATE, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+create table GL_CHUCKS (
+
+gl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+gl_chuck_name VARCHAR(50) NOT NULL
+gl_chuck_location VARCHAR(100) NOT NULL
+gl_chuck_image BLOB NOT NULL,
+is_deleted BOOLEAN NOT NULL DEFAULT FALSE
+) [42001-224]
+2024-12-11 11:40:58.086070-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table GL_CHUCKS (\000d\000a\000d\000agl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,\000d\000agl_chuck_name VARCHAR(50) NOT NULL\000d\000a[*]gl_chuck_location VARCHAR(100) NOT NULL\000d\000agl_chuck_image BLOB NOT NULL,\000d\000ais_deleted BOOLEAN DEFAULT FALSE NOT NULL\000d\000a)"; expected "DEFAULT, GENERATED, ON UPDATE, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+create table GL_CHUCKS (
+
+gl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+gl_chuck_name VARCHAR(50) NOT NULL
+gl_chuck_location VARCHAR(100) NOT NULL
+gl_chuck_image BLOB NOT NULL,
+is_deleted BOOLEAN DEFAULT FALSE NOT NULL
+) [42001-224]
+2024-12-11 11:40:59.510102-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table GL_CHUCKS (\000d\000a\000d\000agl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,\000d\000agl_chuck_name VARCHAR(50) NOT NULL\000d\000a[*]gl_chuck_location VARCHAR(100) NOT NULL\000d\000agl_chuck_image BLOB NOT NULL,\000d\000ais_deleted BOOLEAN DEFAULT FALSE \000d\000a)"; expected "DEFAULT, GENERATED, ON UPDATE, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+create table GL_CHUCKS (
+
+gl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+gl_chuck_name VARCHAR(50) NOT NULL
+gl_chuck_location VARCHAR(100) NOT NULL
+gl_chuck_image BLOB NOT NULL,
+is_deleted BOOLEAN DEFAULT FALSE 
+) [42001-224]
+2024-12-11 11:41:00.197325-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table GL_CHUCKS (\000d\000a\000d\000agl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,\000d\000agl_chuck_name VARCHAR(50) NOT NULL\000d\000a[*]gl_chuck_location VARCHAR(100) NOT NULL\000d\000agl_chuck_image BLOB NOT NULL,\000d\000ais_deleted BOOLEAN DEFAULT FALSE\000d\000a)"; expected "DEFAULT, GENERATED, ON UPDATE, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+create table GL_CHUCKS (
+
+gl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+gl_chuck_name VARCHAR(50) NOT NULL
+gl_chuck_location VARCHAR(100) NOT NULL
+gl_chuck_image BLOB NOT NULL,
+is_deleted BOOLEAN DEFAULT FALSE
+) [42001-224]
+2024-12-11 11:41:08.342802-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table GL_CHUCKS (\000d\000a\000d\000agl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,\000d\000agl_chuck_name VARCHAR(50) NOT NULL\000d\000a[*]gl_chuck_location VARCHAR(100) NOT NULL\000d\000agl_chuck_image BLOB NOT NULL,\000d\000ais_deleted BOOLEAN NOT NULL DEFAULT FALSE\000d\000a)"; expected "DEFAULT, GENERATED, ON UPDATE, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+create table GL_CHUCKS (
+
+gl_chuck_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+gl_chuck_name VARCHAR(50) NOT NULL
+gl_chuck_location VARCHAR(100) NOT NULL
+gl_chuck_image BLOB NOT NULL,
+is_deleted BOOLEAN NOT NULL DEFAULT FALSE
+) [42001-224]
+2024-12-11 13:54:56.186228-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "update [*]table yoke_rings\000d\000aset is_deleted = false"; expected "identifier"; SQL statement:
+update table yoke_rings
+set is_deleted = false [42001-224]
+2024-12-11 14:39:55.872503-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "update yoke_rings set is_deleted [*]false"; expected "., [, ="; SQL statement:
+update yoke_rings set is_deleted false [42001-224]
