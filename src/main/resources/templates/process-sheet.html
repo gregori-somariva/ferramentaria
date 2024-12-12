@@ -12,7 +12,6 @@
 
 <body>
     <div class="main">
-        
         <div class="processSheetWrapper" id="processSheetWrapper">
             <div class="processSheetHeader">
                 <div class="topLogoContainer">
@@ -26,9 +25,7 @@
                 <div id="itemDescription" class="label">Descrição</div>
                 <div id="fieldItemDescription" class="field" th:text="${formSubmission.itemDescription}">POLIA DE FERRO 350 B2 F.20 CH.9</div>
             </div>
-
             <div class="subheader">DADOS DO PROCESSO DE USINAGEM</div>
-
             <div class="row">
                 <div id="machineName" class="label">Máquina</div>
                 <div id="fieldMachineName" class="field" th:text="${machine.machineName}">CNC 24 - QTS 150 ms galax</div>
@@ -39,7 +36,6 @@
                 <div id="cycleTime" class="label">Tempo</div>
                 <div id="fieldCycleTime" class="field" th:text="${cycleTime}"></div>
             </div>
-
             <div class="row">
                 <div id="chuckName" class="label">Castanha</div>
                 <div id="fieldChuckName" class="field" th:text="${chuck.chuckName + '    ' + chuck.chuckLocation}"></div>
@@ -50,26 +46,19 @@
                 <div id="piecesPerHour" class="label">Pç hora</div>
                 <div id="fieldPiecesPerHour" class="field" th:text="${piecesPerHour}"></div>
             </div>
-
             <div class="row">
                 <div id="observation" class="label">Observação</div>
                 <input type="text" id="observationInput" th:value="${formSubmission.holdPressure == null ? 'Não precisa utilizar ponto' : ''}">
             </div>
-
             <div class="subheader">FIXAÇÃO E FERRAMENTAS</div>
-
             <div class="workspace">
-                
                 <div class="imageContainer" id="chuckImage" style="transform: translate(0, 0);">
                     <img class="image" src="#" th:src="@{/imagem/castanha/{id}(id=${formSubmission.chuckId})}" alt="Imagem da Castanha">
                 </div>
-
-                
                 <div th:each="formSubmissionTool, iter : ${formSubmissionTools}" class="imageContainer" 
                     th:attr="id='image-tool-' + ${iter.index}" style="transform: translate(0, 0);">
                     <img class="image" src="#" th:src="@{/imagem/ferramenta/{id}(id=${formSubmissionTool.toolId})}" alt="Imagem da Ferramenta">
                 </div>
-
                 <div class="toolSectionWrapper">
                     <div class="subheader">FERRAMENTAS</div>
                     <div th:each="formSubmissionTool, iter : ${formSubmissionTools}" class="toolRow">
@@ -78,26 +67,20 @@
                         <div id="turretPosition" class="label">Posição Torre</div>
                         <div id="fieldTurretPosition" class="field" th:text="${formSubmissionTool != null ? formSubmissionTool.toolPosition : ''}"></div> 
                     </div>
-                    
                     <div class="measurementRow">
                         <div id="measurement" class="label">Instumento de medição</div>
                         <input type="text" id="measurementInput1" class="measurementInput" required>
                         <input type="text" id="measurementInput2" class="measurementInput">
                         <input type="text" id="measurementInput3" class="measurementInput">
                     </div>
-
                     <div class="row">
                         <div id="alteration" class="label">Alterações</div>
                         <div id="data" class="label">Data</div>
                     </div>
-
-
                     <div class="toolRow">
                         <input type="text" class="alterationInput">
                         <input type="text" class="dataInput">
                     </div>
-
-                    
                     <div class="toolRow">
                         <input type="text" class="alterationInput">
                         <input type="text" class="dataInput">
@@ -108,7 +91,6 @@
                         <input type="text" class="dataInput">
                     </div>
                 </div>
-            
                 <div class="authorWrapper">
                     <div class="authorRow">
                         <div id="developed" class="label">Desenvolvido</div>
@@ -119,13 +101,11 @@
                         <input type="text" id="approvedInput" th:value="${user.role == 'ADMIN' ? user.fullName : ''}" required>
                     </div>
                 </div>
-
                 <div class="timeStamp">
                     <div th:text="${dateString != null ?  dateString : 'Erro ao buscar pela data atual'}">asdsadsd</div>
                 </div>
             </div>
         </div>
-
         <form action="/salvar-ficha" method="POST" id="mainForm">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <input type="hidden" name="submissionId" th:value="${formSubmission.submissionId}">
@@ -134,10 +114,8 @@
                 <img src="/icons/save-button.png" alt="Salvar" >
             </button>
         </form>
-
         <input type="file" id="imageUpload" accept="image/*" style="display:none" />
         <div class="camera-button" id="cameraButton"> <img src="/icons/camera-button.png" alt=""></div>
-
     </div>
 </body>
 </html>

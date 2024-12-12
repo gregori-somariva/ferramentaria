@@ -8,32 +8,26 @@
     <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
     <title>Início</title>
 </head>
-
 <body>
-
     <div th:replace="~{fragments/side-bar.html :: side-bar}"></div>
     <div class="main">
         <div th:if="${error}" class="alert" role="alert">
             <span href="/entidades" th:text="${error}">Erros aparecerão aqui</span>
         </div>
-
         <div class="wrapper">
             <a href="/formulario-ficha/standard" class="formImage">
                 <div class="imageContainer">
                     <img src="/icons/process-sheet.png" alt="imagem ficha">
                 </div>
-            
                 <span class="sheetName">Padrão</span>
             </a>
             <a href="/formulario-ficha/mill" class="formImage">
                 <div class="imageContainer">
                     <img src="/icons/process-sheet-mill.png" alt="imagem ficha">
                 </div>
-            
                 <span class="sheetName">Centro de Usinagem</span>
             </a>
         </div>
-        
         <div class="wrapper">
             <a href="/formulario-ficha/doubleturret" class="formImage">
                 <div class="imageContainer">
@@ -41,7 +35,6 @@
                 </div>
                 <span class="sheetName">Torre Dupla</span>
             </a>
-
             <a href="/formulario-ficha/automatic" class="formImage">
                 <div class="imageContainer">
                     <img src="/icons/process-sheet-atomatic.png" alt="imagem ficha">
@@ -49,6 +42,5 @@
                 <span class="sheetName">Máquina Automática</span>
             </a>
         </div>
-       
 </body>
 </html>

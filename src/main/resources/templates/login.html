@@ -11,18 +11,14 @@
 <body>
     <form action="/login" method="POST" th:action="@{/login}">
         <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-        
         <div class="inputSection">
             <div th:if="${param.error}" class="alert" role="alert">
                 Usuário ou senha inválidos.
             </div>
-
             <label for="username">Usuário</label>
             <input type="text" name="username" id="username" required>
-
             <label for="password">Senha</label>
             <input type="password" name="password" id="password" required>
-
             <button type="submit" id="submitButton">Entrar</button>
         </div>
     </form>

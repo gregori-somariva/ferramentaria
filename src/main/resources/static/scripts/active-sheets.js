@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterInput = document.getElementById('filterInput');
     const table = document.querySelector('.chucksTable');
     const rows = table.querySelectorAll('tbody tr');
-
     function formatDate(dateString) {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const seconds = String(date.getSeconds()).padStart(2, '0');
         return `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
     }
-
     rows.forEach(row => {
         const dateCell = row.querySelector('td:nth-child(7)');
         if (dateCell) {
@@ -21,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
             dateCell.textContent = formatDate(originalDate);
         }
     });
-
     filterInput.addEventListener('input', function() {
         const filterValue = filterInput.value.toLowerCase();
         rows.forEach(row => {

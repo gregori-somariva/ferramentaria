@@ -9,14 +9,11 @@
     <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
     <title>Tabela de entidades</title>
 </head>
-
 <body>
     <div th:replace="~{fragments/side-bar.html :: side-bar(user=${user})}"></div>
-
     <div th:if="${error}" class="alert" role="alert">
         <span style="color: rgb(172, 69, 69);" th:text="${error}">Erros aparecerão aqui</span>
     </div>
-
     <header class="tableSelector">
         <button class="tableTab" data-target="chucksTable">Castanhas</button>
         <button class="tableTab" data-target="toolsTable">Ferramentas</button>
@@ -25,14 +22,12 @@
         <button class="tableTab" data-target="glChucksTable">Castanhas GL</button>
         <button class="tableTab" data-target="yokeRingsTable">Anel Yoke</button>
     </header>
-
     <div class="entityWrapper">
         <div class="tableWrapper" id="chucksTable">
             <h2>Castanhas <a href="/formulario-castanha" class="addEntityLink"> + </a></h2>
             <div class="filterInputWrapper">
                 <input type="text" id="chuckFilterInput" class="filterInput" placeholder="Procure por uma castanha...">
             </div>
-
             <table class="chucksTable">
                 <thead>
                     <tr>
@@ -67,13 +62,11 @@
                 </tbody>
             </table>
         </div>
-
         <div class="tableWrapper" id="toolsTable">
             <h2>Ferramentas <a href="/formulario-ferramenta" class="addEntityLink"> + </a></h2>
             <div class="filterInputWrapper">
                 <input type="text" id="toolFilterInput" class="filterInput" placeholder="Procure por uma ferramenta...">
             </div>
-
             <table class="toolsTable">
                 <thead>
                     <tr>
@@ -106,7 +99,6 @@
                 </tbody>
             </table>
         </div>
-
         <div class="tableWrapper" id="templatesTable">
             <h2>Gabaritos <a href="/formulario-gabarito" class="addEntityLink"> + </a></h2>
             <div class="filterInputWrapper">
@@ -146,7 +138,6 @@
                 </tbody>
             </table>
         </div>
-
         <div class="tableWrapper" id="visesTable">
             <h2>Morsas <a href="/formulario-morsa" class="addEntityLink"> + </a></h2>
             <div class="filterInputWrapper">
@@ -186,13 +177,11 @@
                 </tbody>
             </table>
         </div>
-        
         <div class="tableWrapper" id="glChucksTable">
             <h2>Castanhas GL <a href="/formulario-castanhagl" class="addEntityLink"> + </a></h2>
             <div class="filterInputWrapper">
                 <input type="text" id="glChuckFilterInput" class="filterInput" placeholder="Procure por uma castanha...">
             </div>
-    
             <table class="glChucksTable">
                 <thead>
                     <tr>
@@ -227,13 +216,11 @@
                 </tbody>
             </table>
         </div>
-    
         <div class="tableWrapper" id="yokeRingsTable">
             <h2>Aneis p. Yoke <a href="/formulario-anelyoke" class="addEntityLink"> + </a></h2>
             <div class="filterInputWrapper">
                 <input type="text" id="yokeRingFilterInput" class="filterInput" placeholder="Procure por um anel...">
             </div>
-    
             <table class="yokeRingsTable">
                 <thead>
                     <tr>
@@ -269,7 +256,5 @@
             </table>
         </div>
     </div>
-
-
 </body>
 </html>

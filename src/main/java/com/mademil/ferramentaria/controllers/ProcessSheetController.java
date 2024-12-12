@@ -376,22 +376,31 @@ public class ProcessSheetController {
         @RequestParam("submissionId") Integer submissionId,
         @RequestParam("htmlData") String htmlData,
         RedirectAttributes redirectAttributes,
-        Model model){
+        Model model) {
 
         Optional<FormSubmission> optionalFormSubmission = formSubmissionService.getFormSubmissionById(submissionId);
 
         if (optionalFormSubmission.isPresent() && htmlData != null) {
-            HtmlDocument htmlDocument = new HtmlDocument();
-            htmlDocument.setSubmissionId(submissionId);
-            htmlDocument.setHtmlData(htmlData);
-            htmlDocumentService.saveHtmlDocument(htmlDocument);
+            HtmlDocument existingHtmlDocument = htmlDocumentService.getHtmlDocumentBySubmissionId(submissionId);
 
+            if (existingHtmlDocument != null) {
+                existingHtmlDocument.setHtmlData(htmlData);
+                htmlDocumentService.saveHtmlDocument(existingHtmlDocument);
+            } else {
+                HtmlDocument htmlDocument = new HtmlDocument();
+                htmlDocument.setSubmissionId(submissionId);
+                htmlDocument.setHtmlData(htmlData);
+                htmlDocumentService.saveHtmlDocument(htmlDocument);
+            }
             FormSubmission formSubmission = optionalFormSubmission.get();
             formSubmission.setIsSaved(true);
             formSubmissionService.saveFormSubmission(formSubmission);
-        }else{
+            
+        } else {
             redirectAttributes.addAttribute("error", "ERRO CRÍTICO: Parâmetros necessários não encontrados");
         }
+
         return "redirect:/";
     }
+
 }

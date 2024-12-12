@@ -27,19 +27,14 @@ body {
 </style>
     <body> 
         <div th:replace="~{fragments/side-bar.html :: side-bar(user=${user})}"></div>
-
         <div class="main">
-
             <div th:if="${error}" class="alert" role="alert">
                 <span href="/entidades" th:text="${error}">Erros aparecerão aqui</span>
             </div>
-
             <form action="/salvar-formulario/automatic" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-
                 <input type="hidden" name="userId" th:value="${user.id}">
                 <div class="inputSectionWrapper">
-
                     <div class="leftsideInputs">
                         <div class="input-section-header">Informações de setup</div>
                         <div class="underline"></div>
@@ -97,7 +92,6 @@ body {
                                 th:value="${formSubmission != null ? formSubmission.glNcName : ''}" required>
                             </div>
                         </div>
-    
                         <div class="formRow">
                             <div class="inputWrapper">
                                 <label for="repetitionAmountInput">Nº de Repetições</label>
@@ -110,7 +104,6 @@ body {
                                 th:value="${formSubmission != null ? formSubmission.piecesPerFork : ''}" required>
                             </div>
                         </div>
-
                         <div class="formRow">
                             <div class="inputWrapper">
                                 <label for="glChuckInput">Castanha GL</label>
@@ -129,7 +122,6 @@ body {
                                 </datalist>
                             </div>
                         </div>
-
                         <div class="formRow">
                             <div class="inputWrapper">
                                 <label for="operationInput">Operação</label>
@@ -147,14 +139,12 @@ body {
                                     <option value="98">Furo Fixação Lado 2</option>
                                 </datalist>
                             </div>
-
                             <div class="inputWrapper">
                                 <label for="cycleTimeInput">Tempo</label>
                                 <input type="text" id="cycleTimeInput" name="cycleTime" 
                                 th:value="${cycleTime != null ? cycleTime : ''}" required>
                             </div>
                         </div>
-                        
                         <div class="formRow">
                             <div class="inputWrapper">
                                 <label for="glSpeedInput">Velocidade GL</label>
@@ -163,32 +153,24 @@ body {
                             </div>
                         </div>
                     </div>
-
-                  
-
                     <div class="rightsideInputs">
                         <div class="input-section-header">Ferramentas</div>
                         <div class="underline"></div>
                         <datalist id="toolDatalist">
                             <option th:each="tool : ${tools}" th:value="${tool.toolId}" th:text="${tool.toolName}"></option>
                         </datalist>
-
-
                         <div class="formRow">
-
                             <div class="toolInput">
                                 <div class="inputWrapper">
                                     <label for="tool1Input">Ferramenta 1</label>
                                     <input type="text" id="tool1Input" name="tool1Id" list="toolDatalist" 
                                         th:value="${formSubmission != null && toolList.size() > 0 ? toolList[0].toolId : ''}" required>
                                 </div>
-                            
                                 <div class="inputWrapper">
                                     <label for="tool1Length">Com.</label>
                                     <input type="number" id="tool1Length" name="tool1Length" class="lengthInput"
                                         th:value="${formSubmission != null && toolList.size() > 0 && toolList[0].toolLength != null ? toolList[0].toolLength : ''}">
                                 </div>
-                                
                                 <div class="inputWrapper">
                                     <label for="tool1Position">Pos.</label>
                                     <input type="number" id="tool1Position" name="tool1Position" class="positionInput" 
@@ -196,7 +178,6 @@ body {
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="formRow">
                             <div class="toolInput">
                                 <div class="inputWrapper">
@@ -216,7 +197,6 @@ body {
                                 </div>
                             </div>
                         </div>
-
                         <div class="formRow">
                             <div class="toolInput">
                                 <div class="inputWrapper">
@@ -236,7 +216,6 @@ body {
                                 </div>
                             </div>
                         </div>
-
                         <div class="formRow">
                             <div class="toolInput">
                                 <div class="inputWrapper">
@@ -256,7 +235,6 @@ body {
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="formRow">
                             <div class="toolInput">
                                 <div class="inputWrapper">
@@ -282,7 +260,6 @@ body {
                     <button type="submit" id="submit-form">Gerar Ficha</button>
                 </div>
             </form>
-            
         </div>
     </body>
 </html>

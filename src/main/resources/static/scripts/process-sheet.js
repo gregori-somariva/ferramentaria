@@ -1,78 +1,73 @@
 document.addEventListener('DOMContentLoaded', () => {
     const positions = {};
     const workspace = document.querySelector('.workspace');
-
     function initializeInteract(target) {
         const rotationHandle = target.querySelector('.rotation-handle');
-
         interact(target)
-        .draggable({
-          listeners: {
-            start(event) {
-              const id = event.target.getAttribute('id');
-              if (!positions[id]) {
-                positions[id] = { x: 0, y: 0, angle: 0 };
-              }
-            },
-            move(event) {
-              if (event.target !== rotationHandle) {
-                const target = event.target;
-                const id = target.getAttribute('id');
-                positions[id].x += event.dx;
-                positions[id].y += event.dy;
-                applyTransforms(target, id);
-              }
-            },
-          },
-          modifiers: [
-            interact.modifiers.snap({
-              targets: [interact.snappers.grid({ x: 5, y: 5 })],
-              range: Infinity,
-              relativePoints: [{ x: 0, y: 0 }],
-            }),
-            interact.modifiers.restrict({
-              restriction: 'parent',  
-              elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
-              endOnly: true,
-            }),
-          ],
-        })
-        .resizable({
-          edges: { left: false, right: true, bottom: true, top: false },
-          listeners: {
-            move(event) {
-              const target = event.target;
-              const { width, height } = event.rect;
-              target.style.width = `${width}px`;
-              target.style.height = `${height}px`;
-              const img = target.querySelector('img');
-              if (img) {
-                img.style.width = '100%';
-                img.style.height = '100%';
-              }
-              applyTransforms(target, target.getAttribute('id'));
-            },
-          },
-          modifiers: [
-            interact.modifiers.restrictEdges({ outer: 'parent' }),
-            interact.modifiers.restrictSize({
-              min: { width: 50, height: 50 },
-              max: { width: 300, height: 500 },
-            }),
-          ],
-        });      
-    }      
-
+            .draggable({
+                listeners: {
+                    start(event) {
+                        const id = event.target.getAttribute('id');
+                        if (!positions[id]) {
+                            positions[id] = { x: 0, y: 0, angle: 0 };
+                        }
+                    },
+                    move(event) {
+                        if (event.target !== rotationHandle) {
+                            const target = event.target;
+                            const id = target.getAttribute('id');
+                            positions[id].x += event.dx;
+                            positions[id].y += event.dy;
+                            applyTransforms(target, id);
+                        }
+                    },
+                },
+                modifiers: [
+                    interact.modifiers.snap({
+                        targets: [interact.snappers.grid({ x: 5, y: 5 })],
+                        range: Infinity,
+                        relativePoints: [{ x: 0, y: 0 }],
+                    }),
+                    interact.modifiers.restrict({
+                        restriction: 'parent',
+                        elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
+                        endOnly: true,
+                    }),
+                ],
+            })
+            .resizable({
+                edges: { left: false, right: true, bottom: true, top: false },
+                listeners: {
+                    move(event) {
+                        const target = event.target;
+                        const { width, height } = event.rect;
+                        target.style.width = `${width}px`;
+                        target.style.height = `${height}px`;
+                        const img = target.querySelector('img');
+                        if (img) {
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                        }
+                        applyTransforms(target, target.getAttribute('id'));
+                    },
+                },
+                modifiers: [
+                    interact.modifiers.restrictEdges({ outer: 'parent' }),
+                    interact.modifiers.restrictSize({
+                        min: { width: 50, height: 50 },
+                        max: { width: 300, height: 500 },
+                    }),
+                ],
+        });
+    }
     function applyTransforms(element, id) {
         const pos = positions[id];
         element.style.transform = `translate(${pos.x}px, ${pos.y}px) rotate(${pos.angle}deg)`;
     }
-
     const existingImageContainers = document.querySelectorAll('.imageContainer');
     existingImageContainers.forEach(container => {
         initializeInteract(container);
     });
-
     function compressImage(file) {
         return new Promise((resolve, reject) => {
             const img = new Image();
@@ -115,14 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.readAsDataURL(file);
         });
     }
-
     const cameraButton = document.getElementById('cameraButton');
     const imageUpload = document.getElementById('imageUpload');
-
     cameraButton.addEventListener('click', () => {
         imageUpload.click();
     });
-
     imageUpload.addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
@@ -141,42 +133,58 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-
-    const processForm = document.getElementById('mainForm');
+    const mainForm = document.getElementById('mainForm');
     const htmlDataInput = document.getElementById('htmlDataInput');
-
     function updateInputsInDOM() {
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
             if (input.type === 'text' || input.type === 'number') {
-                input.setAttribute('value', input.value);  
+                input.setAttribute('value', input.value);
             }
         });
     }
-
     function modifyHTMLBeforeSubmission() {
-        const scriptTag = document.querySelector('script[src="/scripts/process-sheet.js"]');
+        const clonedDocument = document.cloneNode(true);
+        const clonedForm = clonedDocument.getElementById('mainForm');
+        if (clonedForm) {
+            clonedForm.remove();
+        }
+        const scriptTag = clonedDocument.querySelector('script[src="/scripts/process-sheet.js"]');
         if (scriptTag) {
             scriptTag.setAttribute('src', '/scripts/saved-process-sheet.js');
         }
-    
-        const cameraButton = document.getElementById('cameraButton');
-        const imageUpload = document.getElementById('imageUpload');
+        const interactScript = clonedDocument.querySelector('script[src="/scripts/interact.min.js"]');
+        if (interactScript) {
+            interactScript.remove();
+        }
+        const cameraButton = clonedDocument.getElementById('cameraButton');
+        const imageUpload = clonedDocument.getElementById('imageUpload');
         if (cameraButton) cameraButton.remove();
         if (imageUpload) imageUpload.remove();
-
-        const saveButton = document.querySelector('#save-button img');
-        if (saveButton) {
-            saveButton.setAttribute('src', '/icons/download-button.png');
+        const newSaveButton = clonedDocument.createElement('button');
+        newSaveButton.id = 'save-button';
+        newSaveButton.style.border = 'none';
+        newSaveButton.style.background = 'none';
+        newSaveButton.style.padding = '0';
+        const newImage = clonedDocument.createElement('img');
+        newImage.src = '/icons/download-button.png';
+        newImage.alt = 'Salvar';
+        newSaveButton.appendChild(newImage);
+        clonedDocument.body.appendChild(newSaveButton);
+        const clonedInputs = clonedDocument.querySelectorAll('input');
+        clonedInputs.forEach(input => {
+            input.setAttribute('readonly', 'true');
+        });
+        const serializer = new XMLSerializer();
+        const htmlData = serializer.serializeToString(clonedDocument);
+        if (htmlDataInput) {
+            htmlDataInput.value = htmlData;
         }
     }
-
-    processForm.addEventListener('submit', function(event) {
+    mainForm.addEventListener('submit', function(event) {
         event.preventDefault();
         updateInputsInDOM();
         modifyHTMLBeforeSubmission();
-        htmlDataInput.value = document.documentElement.outerHTML;
-        processForm.submit();
-        window.print();
+        mainForm.submit();
     });
 });
